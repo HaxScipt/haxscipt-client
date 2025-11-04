@@ -1,0 +1,15 @@
+body{padding:0;margin:0;font:16px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;color:#333;background:#fff}
+.wrapper{width:860px;margin:0 auto}
+header{width:270px;float:left;position:fixed}
+section{width:500px;float:right;padding-bottom:50px}
+h1,h2,h3{line-height:1.1}
+header ul{list-style:none;padding:0}
+header ul li{margin:0 0 8px}
+header a{color:#4183C4;text-decoration:none}
+section a{color:#4183C4}
+footer{clear:both;position:relative;padding:20px 0}
+@media print, screen and (max-width: 960px) {
+  .wrapper{width:auto;margin:0 20px}
+  header{position:static;float:none;width:auto}
+  section{float:none;width:auto}
+}
