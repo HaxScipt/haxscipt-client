@@ -1,0 +1,5 @@
+title: HaxScipt Client
+description: Resmî proje sayfası
+remote_theme: orderedlist/minimal
+plugins:
+  - jekyll-remote-theme
