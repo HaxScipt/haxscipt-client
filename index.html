@@ -1,65 +1,1100 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>HaxScipt Client</title>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>HaxScipt Client — Resmi Real Soccer İstemcisi</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>HaxScipt Client</h1>
-        <p>Real Soccer için geliştirilen resmi istemci</p>
-        <p class="view">
-          <a href="https://github.com/haxscipt/haxscipt-client">
-            GitHub’da görüntüle <small>haxscipt/haxscipt-client</small>
+  <meta name="description" content="HaxScipt Client, Real Soccer için geliştirilmiş resmi masaüstü istemcisi. Performans optimizasyonu, modern arayüz, otomatik güncelleme ve Discord entegrasyonu." />
+  <meta property="og:title" content="HaxScipt Client" />
+  <meta property="og:description" content="Real Soccer için geliştirilmiş resmi istemci. Tek tıkla bağlan, daha stabil oyna." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/og.png" />
+  <meta name="theme-color" content="#0b0f1a" />
+
+  <style>
+    :root{
+      --bg: #070A12;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --muted2: rgba(255,255,255,.52);
+      --shadow: 0 18px 50px rgba(0,0,0,.55);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1120px;
+
+      --brandA: #F6C24A;
+      --brandB: #FFD86A;
+      --accent: #6EE7FF;
+      --accent2:#A78BFA;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height: 100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% -10%, rgba(246,194,74,.16), transparent 55%),
+                  radial-gradient(900px 700px at 80% 10%, rgba(110,231,255,.14), transparent 55%),
+                  radial-gradient(900px 700px at 60% 110%, rgba(167,139,250,.12), transparent 55%),
+                  var(--bg);
+      overflow-x: hidden;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-decoration-color: rgba(255,255,255,.35); }
+
+    /* background grid + noise */
+    .bg-grid{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 44px 44px;
+      opacity: .12;
+      mask-image: radial-gradient(65% 50% at 50% 30%, #000 35%, transparent 70%);
+    }
+    .bg-noise{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .08;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    .wrap{ width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+
+    /* topbar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to bottom, rgba(7,10,18,.82), rgba(7,10,18,.55));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .nav{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 180px;
+    }
+    .logo{
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(246,194,74,1), rgba(110,231,255,.9));
+      box-shadow: 0 10px 30px rgba(246,194,74,.12);
+      position: relative;
+      overflow: hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 50%);
+      transform: rotate(20deg);
+    }
+    .brand h1{
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.85);
+    }
+    .brand span{
+      display:block;
+      font-size: 12px;
+      color: var(--muted2);
+      letter-spacing: .02em;
+      text-transform: none;
+      margin-top: 2px;
+    }
+
+    .menu{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .menu a{
+      font-size: 13px;
+      color: var(--muted);
+      padding: 10px 10px;
+      border-radius: 12px;
+    }
+    .menu a:hover{
+      background: rgba(255,255,255,.05);
+      text-decoration: none;
+      color: rgba(255,255,255,.88);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none !important;
+      box-shadow: 0 10px 40px rgba(0,0,0,.28);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.18);
+    }
+    .btn.primary{
+      border: 1px solid rgba(246,194,74,.35);
+      background: linear-gradient(135deg, rgba(246,194,74,.18), rgba(110,231,255,.10));
+    }
+    .btn.primary:hover{
+      border-color: rgba(246,194,74,.55);
+      background: linear-gradient(135deg, rgba(246,194,74,.22), rgba(110,231,255,.13));
+    }
+    .btn.ghost{
+      background: transparent;
+      box-shadow: none;
+      border-color: rgba(255,255,255,.10);
+    }
+
+    /* hero */
+    .hero{
+      padding: 56px 0 24px;
+      position: relative;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 26px;
+      align-items: stretch;
+    }
+    .kicker{
+      display:inline-flex;
+      gap: 10px;
+      align-items:center;
+      color: rgba(255,255,255,.80);
+      font-size: 12px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      width: fit-content;
+    }
+    .dot{
+      width: 8px; height: 8px; border-radius: 99px;
+      background: var(--ok);
+      box-shadow: 0 0 0 6px rgba(34,197,94,.12);
+    }
+    .hero h2{
+      margin: 16px 0 10px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    .grad{
+      background: linear-gradient(90deg, rgba(246,194,74,1), rgba(110,231,255,1), rgba(167,139,250,1));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 52ch;
+    }
+    .cta{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      align-items: center;
+    }
+    .meta-row{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      color: var(--muted2);
+      font-size: 12px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      padding: 10px 12px;
+      border-radius: 999px;
+    }
+    .pill code{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,.82);
+    }
+
+    /* preview */
+    .preview{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+      min-height: 320px;
+    }
+    .preview-top{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+    }
+    .traffic{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+    }
+    .traffic i{
+      width: 10px; height: 10px; border-radius: 99px; display:inline-block;
+      background: rgba(255,255,255,.18);
+    }
+    .traffic i:nth-child(1){ background: rgba(239,68,68,.55); }
+    .traffic i:nth-child(2){ background: rgba(245,158,11,.55); }
+    .traffic i:nth-child(3){ background: rgba(34,197,94,.55); }
+    .preview-top .tag{
+      font-size: 12px;
+      color: rgba(255,255,255,.72);
+      letter-spacing: .02em;
+    }
+    .shot{
+      position: relative;
+      height: calc(100% - 48px);
+      background:
+        radial-gradient(600px 240px at 30% 20%, rgba(246,194,74,.12), transparent 55%),
+        radial-gradient(500px 260px at 80% 30%, rgba(110,231,255,.12), transparent 55%),
+        radial-gradient(600px 260px at 50% 110%, rgba(167,139,250,.12), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+    }
+    .shot-inner{
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 16 / 10;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      overflow:hidden;
+      position: relative;
+    }
+    .shot-inner img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+      opacity: .92;
+    }
+    .shot-overlay{
+      position:absolute;
+      left: 16px;
+      bottom: 14px;
+      right: 16px;
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+    .hud{
+      display:flex; gap: 10px; flex-wrap: wrap;
+    }
+    .hud .chip{
+      font-size: 11px;
+      color: rgba(255,255,255,.80);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.28);
+      padding: 8px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+    }
+
+    /* sections */
+    section{
+      padding: 34px 0;
+    }
+    .section-title{
+      display:flex;
+      align-items:flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+    .section-title h3{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+    .section-title p{
+      margin:0;
+      color: var(--muted2);
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 64ch;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+    .card{
+      grid-column: span 4;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      padding: 16px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+      position: relative;
+      overflow: hidden;
+      min-height: 132px;
+    }
+    .card:before{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(246,194,74,.10), transparent 45%),
+                  radial-gradient(circle at 70% 30%, rgba(110,231,255,.10), transparent 45%),
+                  radial-gradient(circle at 50% 90%, rgba(167,139,250,.10), transparent 45%);
+      transform: rotate(10deg);
+      opacity: .85;
+      pointer-events:none;
+    }
+    .card > *{ position: relative; }
+    .card h4{
+      margin: 2px 0 8px;
+      font-size: 15px;
+    }
+    .card p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .icon{
+      width: 38px; height: 38px;
+      border-radius: 14px;
+      display:flex; align-items:center; justify-content:center;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    /* download panel */
+    .download{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .download-head{
+      padding: 18px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      gap: 16px;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .download-head .left h3{
+      margin:0 0 6px;
+      font-size: 18px;
+    }
+    .download-head .left .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .status{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .badge{
+      display:inline-flex;
+      gap: 8px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      color: rgba(255,255,255,.82);
+      font-size: 12px;
+    }
+    .badge b{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,.88);
+      font-weight: 700;
+    }
+
+    .download-body{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 0;
+    }
+    .dl-left{
+      padding: 18px;
+      border-right: 1px solid rgba(255,255,255,.08);
+    }
+    .dl-right{
+      padding: 18px;
+    }
+    .dl-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .dl-tile{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      padding: 14px;
+      min-height: 104px;
+      display:flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .dl-tile h5{
+      margin:0;
+      font-size: 13px;
+      color: rgba(255,255,255,.86);
+    }
+    .dl-tile p{
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.55;
+    }
+    .dl-actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .list{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .list li{ margin: 3px 0; }
+    .mono{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.80);
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 6px 9px;
+      border-radius: 10px;
+    }
+
+    /* faq */
+    details{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    details + details{ margin-top: 12px; }
+    summary{
+      cursor: pointer;
+      font-weight: 700;
+      color: rgba(255,255,255,.86);
+      outline: none;
+    }
+    details p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* footer */
+    footer{
+      padding: 30px 0 44px;
+      color: var(--muted2);
+      font-size: 12px;
+    }
+    .foot{
+      display:flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 18px;
+    }
+    .foot .links{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .small{ font-size: 12px; color: var(--muted2); }
+
+    /* responsiveness */
+    @media (max-width: 980px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .download-body{ grid-template-columns: 1fr; }
+      .dl-left{ border-right: none; border-bottom: 1px solid rgba(255,255,255,.08); }
+      .cards .card{ grid-column: span 6; }
+    }
+    @media (max-width: 640px){
+      .menu{ display:none; }
+      .cards .card{ grid-column: span 12; }
+      .dl-grid{ grid-template-columns: 1fr; }
+      .wrap{ width: min(var(--max), calc(100% - 28px)); }
+      .hero{ padding-top: 34px; }
+    }
+
+    /* subtle animated glow */
+    @media (prefers-reduced-motion: no-preference){
+      .logo, .card, .download, .preview{
+        will-change: transform;
+      }
+      .floaty{
+        animation: floaty 8s ease-in-out infinite;
+      }
+      @keyframes floaty{
+        0%,100%{ transform: translateY(0px); }
+        50%{ transform: translateY(-6px); }
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="wrap">
+      <div class="nav">
+        <a class="brand" href="#top" aria-label="HaxScipt Client ana sayfa">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1>HaxScipt Client</h1>
+            <span>Real Soccer için resmi istemci</span>
+          </div>
+        </a>
+
+        <nav class="menu" aria-label="Sayfa menüsü">
+          <a href="#ozellikler">Özellikler</a>
+          <a href="#indir">İndir</a>
+          <a href="#sss">SSS</a>
+          <a href="https://github.com/haxscipt/haxscipt-client" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+
+        <div style="display:flex; gap:10px; align-items:center;">
+          <a class="btn ghost" href="https://discord.gg/haxscipt" target="_blank" rel="noreferrer" aria-label="Discord'a katıl">
+            💬 Discord
           </a>
-        </p>
-        <ul>
-          <li><a href="https://github.com/haxscipt/haxscipt-client/releases">İndir <strong>Releases</strong></a></li>
-          <li><a href="https://github.com/haxscipt/haxscipt-client/issues">Sorun Bildir</a></li>
-          <li><a href="https://discord.gg/haxscipt">Discord Sunucusu</a></li>
-        </ul>
-      </header>
-
-      <section>
-        <h1>HaxScipt Client Nedir?</h1>
-        <p>
-          HaxScipt Client, HaxBall Real Soccer topluluğu için özel olarak geliştirilmiş 
-          bir masaüstü istemcidir. FPS optimizasyonları, modern arayüz, otomatik güncellemeler 
-          ve Discord entegrasyonu içerir.
-        </p>
-
-        <h2>Öne Çıkan Özellikler</h2>
-        <ul>
-          <li>⚡ Yüksek performanslı grafik motoru</li>
-          <li>🧩 HaxScipt sunucularına tek tıkla bağlanma</li>
-          <li>💬 Discord RPC desteği</li>
-          <li>🎨 Karanlık tema, gelişmiş ayarlar menüsü</li>
-        </ul>
-
-        <h2>İndir</h2>
-        <p>
-          En güncel sürümü <a href="https://github.com/haxscipt/haxscipt-client/releases">Releases</a> 
-          sekmesinden indirebilirsiniz.
-        </p>
-
-        <h2>Ekran Görüntüsü</h2>
-        <p><img src="https://raw.githubusercontent.com/haxscipt/haxscipt-client/main/assets/client_preview.png" width="480" alt="HaxScipt Client"></p>
-      </section>
-
-      <footer>
-        <p>Bu proje <a href="https://github.com/haxscipt">HaxScipt</a> tarafından geliştirilmektedir.</p>
-        <p><small>Theme by <a href="https://orderedlist.com/minimal/">orderedlist/minimal</a></small></p>
-      </footer>
+          <a class="btn primary" href="#indir" aria-label="İndir bölümüne git">
+            ⬇️ İndir
+          </a>
+        </div>
+      </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-  </body>
+  </div>
+
+  <!-- HERO -->
+  <main id="top" class="wrap">
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker">
+            <span class="dot" aria-hidden="true"></span>
+            Stabil • Hızlı • Real Soccer odaklı
+          </div>
+
+          <h2>
+            Real Soccer deneyimini<br />
+            <span class="grad">tek tıkla</span> üst seviyeye taşı.
+          </h2>
+
+          <p>
+            HaxScipt Client; performans optimizasyonları, modern arayüz, otomatik güncellemeler ve Discord entegrasyonu ile
+            Real Soccer’da daha stabil, daha akıcı bir deneyim sunar.
+          </p>
+
+          <div class="cta">
+            <a class="btn primary" id="btnPrimaryDownload" href="#indir">
+              ⚡ En Güncel Sürümü İndir
+            </a>
+            <a class="btn" href="https://github.com/haxscipt/haxscipt-client" target="_blank" rel="noreferrer">
+              ⭐ Projeyi Görüntüle
+            </a>
+          </div>
+
+          <div class="meta-row">
+            <div class="pill">
+              🏷️ Sürüm: <code id="verText">yükleniyor…</code>
+            </div>
+            <div class="pill">
+              🧱 Platform: <code>Windows / macOS / Linux</code>
+            </div>
+            <div class="pill">
+              🔒 Güvenlik: <code>Resmi release + checksum</code>
+            </div>
+          </div>
+
+          <div style="margin-top:12px; color: var(--muted2); font-size: 12px;">
+            İpucu: İndirme butonları otomatik olarak en güncel GitHub Release’ine bağlanır.
+          </div>
+        </div>
+
+        <div class="preview floaty" aria-label="Uygulama önizleme kartı">
+          <div class="preview-top">
+            <div class="traffic" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="tag">HaxScipt Client • Preview</div>
+          </div>
+          <div class="shot">
+            <div class="shot-inner">
+              <!-- İstersen buraya kendi screenshot'unu koy:
+                   /assets/client_preview.png
+                   veya direkt URL kullan. -->
+              <img src="assets/client_preview.png" alt="HaxScipt Client ekran görüntüsü (örnek)" onerror="this.style.display='none'; this.parentElement.style.background='rgba(0,0,0,.25)';" />
+              <div class="shot-overlay">
+                <div class="hud">
+                  <div class="chip">⚙️ FPS Optimizasyonu</div>
+                  <div class="chip">🧩 Tek Tık Bağlan</div>
+                  <div class="chip">💬 Discord RPC</div>
+                </div>
+                <div class="hud">
+                  <div class="chip" id="releaseDateChip">📅 —</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- FEATURES -->
+    <section id="ozellikler">
+      <div class="section-title">
+        <div>
+          <h3>Öne çıkan özellikler</h3>
+          <p>Hedef: Real Soccer oynarken daha stabil, daha hızlı ve daha kontrol edilebilir bir deneyim.</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="icon">⚡</div>
+          <h4>Performans Odaklı</h4>
+          <p>FPS stabilitesi ve input akıcılığı için optimize edilmiş ayarlar; gereksiz yükleri azaltan yapı.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon">🧩</div>
+          <h4>Tek Tıkla Bağlan</h4>
+          <p>HaxScipt sunucularına hızlı erişim, pratik bağlantı akışı ve basit kullanım.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon">🛡️</div>
+          <h4>Güncel & Güvenli</h4>
+          <p>Resmi release dağıtımı, sürüm takibi ve doğrulanabilir indirme akışı (checksum kullanımı önerilir).</p>
+        </article>
+
+        <article class="card">
+          <div class="icon">💬</div>
+          <h4>Discord Entegrasyonu</h4>
+          <p>Discord Rich Presence ile oyunda olduğun durumu göster; toplulukla daha kolay etkileşim.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon">🎨</div>
+          <h4>Modern Arayüz</h4>
+          <p>Karanlık tema, temiz menü, düzenli ayarlar. “Az ama net” tasarım dili.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon">🧪</div>
+          <h4>Gelişmiş Ayarlar</h4>
+          <p>Deneysel seçenekler, optimizasyon profilleri ve kullanıcı odaklı ince ayarlar.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section id="indir">
+      <div class="section-title">
+        <div>
+          <h3>İndir</h3>
+          <p>En güncel sürüm otomatik bulunur. İstersen manuel olarak “Releases” sayfasından da indirebilirsin.</p>
+        </div>
+      </div>
+
+      <div class="download">
+        <div class="download-head">
+          <div class="left">
+            <h3>HaxScipt Client • <span class="grad" id="releaseName">Latest Release</span></h3>
+            <p class="sub" id="releaseNotesMini">Yükleniyor…</p>
+          </div>
+
+          <div class="status">
+            <div class="badge">Sürüm <b id="verBadge">—</b></div>
+            <div class="badge">Yayın <b id="dateBadge">—</b></div>
+            <div class="badge">Durum <b id="statusBadge">API</b></div>
+          </div>
+        </div>
+
+        <div class="download-body">
+          <div class="dl-left">
+            <div style="display:flex; align-items:center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+              <div>
+                <div class="small">Önerilen</div>
+                <div style="font-weight: 800; font-size: 16px; margin-top: 4px;">En güncel sürüm ile başlayın</div>
+              </div>
+              <a class="btn primary" id="btnReleasePage" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
+                📦 Releases Sayfası
+              </a>
+            </div>
+
+            <div class="dl-grid" style="margin-top: 14px;">
+              <div class="dl-tile">
+                <div>
+                  <h5>Windows</h5>
+                  <p>.exe / .msi (varsa otomatik listelenir)</p>
+                </div>
+                <div class="dl-actions">
+                  <a class="btn primary" id="dlWin" href="#" target="_blank" rel="noreferrer">⬇️ İndir</a>
+                  <span class="mono" id="dlWinMeta">—</span>
+                </div>
+              </div>
+
+              <div class="dl-tile">
+                <div>
+                  <h5>macOS</h5>
+                  <p>.dmg (varsa otomatik listelenir)</p>
+                </div>
+                <div class="dl-actions">
+                  <a class="btn primary" id="dlMac" href="#" target="_blank" rel="noreferrer">⬇️ İndir</a>
+                  <span class="mono" id="dlMacMeta">—</span>
+                </div>
+              </div>
+
+              <div class="dl-tile">
+                <div>
+                  <h5>Linux</h5>
+                  <p>.AppImage / .deb (varsa otomatik listelenir)</p>
+                </div>
+                <div class="dl-actions">
+                  <a class="btn primary" id="dlLin" href="#" target="_blank" rel="noreferrer">⬇️ İndir</a>
+                  <span class="mono" id="dlLinMeta">—</span>
+                </div>
+              </div>
+            </div>
+
+            <ul class="list">
+              <li><b>Kurulum:</b> İndirdiğin dosyayı çalıştır → “Next” → bitti.</li>
+              <li><b>Otomatik güncelleme:</b> Yeni sürüm geldiğinde uygulama içinden bildirir.</li>
+              <li><b>Manuel:</b> Releases sayfasından sürümü seçip indirebilirsin.</li>
+            </ul>
+          </div>
+
+          <div class="dl-right">
+            <div style="display:flex; align-items:center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+              <div>
+                <div class="small">Sistem Gereksinimleri</div>
+                <div style="font-weight: 800; font-size: 16px; margin-top: 4px;">Minimum</div>
+              </div>
+              <span class="mono">x64 önerilir</span>
+            </div>
+
+            <ul class="list">
+              <li>Windows 10+ / macOS 11+ / Ubuntu 20.04+ (benzeri)</li>
+              <li>4 GB RAM (8 GB önerilir)</li>
+              <li>İnternet bağlantısı (güncelleme + sunucu erişimi)</li>
+            </ul>
+
+            <div style="margin-top: 16px;">
+              <div class="small">Notlar</div>
+              <p style="margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7;">
+                Eğer otomatik indirme linkleri görünmüyorsa, release asset isimleri farklı olabilir.
+                Bu durumda Releases sayfasından manuel indirme yapabilirsin.
+              </p>
+              <div style="margin-top: 10px; display:flex; gap: 10px; flex-wrap: wrap;">
+                <a class="btn" href="https://github.com/haxscipt/haxscipt-client/issues" target="_blank" rel="noreferrer">🐞 Sorun Bildir</a>
+                <a class="btn" href="https://discord.gg/haxscipt" target="_blank" rel="noreferrer">🧑‍🤝‍🧑 Destek</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="sss">
+      <div class="section-title">
+        <div>
+          <h3>SSS</h3>
+          <p>En çok sorulanlar. İstersen burayı tamamen kendi metinlerinle güncelleriz.</p>
+        </div>
+      </div>
+
+      <details>
+        <summary>Bu istemci ne işe yarıyor?</summary>
+        <p>
+          Real Soccer odaklı bir masaüstü istemcisi: performans odaklı ayarlar, modern arayüz, otomatik güncelleme ve topluluk entegrasyonları.
+        </p>
+      </details>
+
+      <details>
+        <summary>İndirme linkleri otomatik mi?</summary>
+        <p>
+          Evet. Sayfa, GitHub Releases API’den en güncel sürümü çeker ve uygun dosyaları (exe/msi/dmg/AppImage/deb) otomatik yakalar.
+          Dosya isimleri farklıysa Releases sayfasına yönlendirir.
+        </p>
+      </details>
+
+      <details>
+        <summary>Güvenlik için ne önerirsiniz?</summary>
+        <p>
+          Resmi release’ten indirin, mümkünse checksum doğrulayın. Şüpheli üçüncü taraf indirmelerden kaçının.
+        </p>
+      </details>
+
+      <details>
+        <summary>Siteyi GitHub Pages’a nasıl koyarım?</summary>
+        <p>
+          Repo içinde <span class="mono">index.html</span> olarak kaydet → Settings → Pages → Branch seç → kaydet.
+          Aynı klasörde <span class="mono">assets/client_preview.png</span> ekleyebilir veya görseli kaldırabilirsiniz.
+        </p>
+      </details>
+    </section>
+
+    <footer>
+      <div class="foot">
+        <div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div class="logo" style="width:28px; height:28px; border-radius: 10px;"></div>
+            <div>
+              <div style="font-weight: 800; color: rgba(255,255,255,.85);">HaxScipt</div>
+              <div class="small">Real Soccer topluluğu için geliştirilir.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="links">
+          <a href="https://github.com/haxscipt/haxscipt-client" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">Releases</a>
+          <a href="https://github.com/haxscipt/haxscipt-client/issues" target="_blank" rel="noreferrer">Issues</a>
+          <a href="https://discord.gg/haxscipt" target="_blank" rel="noreferrer">Discord</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 12px;" class="small">
+        © <span id="year"></span> HaxScipt • Tasarım: modern minimal + performans odaklı.
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // ==========================
+    // AYAR: Repo bilgini gir
+    // ==========================
+    const OWNER = "haxscipt";
+    const REPO  = "haxscipt-client";
+
+    // Sayfa elemanları
+    const el = (id) => document.getElementById(id);
+
+    const verText = el("verText");
+    const verBadge = el("verBadge");
+    const dateBadge = el("dateBadge");
+    const statusBadge = el("statusBadge");
+    const releaseName = el("releaseName");
+    const releaseNotesMini = el("releaseNotesMini");
+    const releaseDateChip = el("releaseDateChip");
+
+    const dlWin = el("dlWin");
+    const dlMac = el("dlMac");
+    const dlLin = el("dlLin");
+
+    const dlWinMeta = el("dlWinMeta");
+    const dlMacMeta = el("dlMacMeta");
+    const dlLinMeta = el("dlLinMeta");
+
+    const btnPrimaryDownload = el("btnPrimaryDownload");
+    const btnReleasePage = el("btnReleasePage");
+
+    function fmtDate(iso){
+      try{
+        const d = new Date(iso);
+        return d.toLocaleDateString("tr-TR", { year:"numeric", month:"long", day:"2-digit" });
+      }catch(e){
+        return "—";
+      }
+    }
+
+    function pickAsset(assets, patterns){
+      // patterns: ["\\.exe$", "\\.msi$"] gibi regex stringleri
+      for(const p of patterns){
+        const re = new RegExp(p, "i");
+        const hit = assets.find(a => re.test(a.name));
+        if(hit) return hit;
+      }
+      return null;
+    }
+
+    function bytesToHuman(bytes){
+      if(!bytes && bytes !== 0) return "—";
+      const units = ["B","KB","MB","GB"];
+      let v = bytes, u = 0;
+      while(v >= 1024 && u < units.length - 1){ v/=1024; u++; }
+      return `${v.toFixed(v >= 10 || u === 0 ? 0 : 1)} ${units[u]}`;
+    }
+
+    function disableButton(btn, metaEl, text){
+      btn.href = `https://github.com/${OWNER}/${REPO}/releases`;
+      btn.textContent = "Releases'a Git";
+      btn.classList.remove("primary");
+      btn.classList.add("btn");
+      metaEl.textContent = text || "asset yok";
+    }
+
+    async function loadLatestRelease(){
+      const api = `https://api.github.com/repos/${OWNER}/${REPO}/releases/latest`;
+
+      // fallback linkler
+      const releasePage = `https://github.com/${OWNER}/${REPO}/releases`;
+      btnReleasePage.href = releasePage;
+
+      try{
+        statusBadge.textContent = "Yükleniyor";
+        const res = await fetch(api, { headers: { "Accept": "application/vnd.github+json" }});
+        if(!res.ok) throw new Error("GitHub API error: " + res.status);
+        const data = await res.json();
+
+        const tag = data.tag_name || "latest";
+        const name = data.name || tag;
+        const date = data.published_at || data.created_at || null;
+
+        // küçük release notu (ilk cümle)
+        const body = (data.body || "").trim();
+        const firstLine = body.split("\n").find(l => l.trim().length) || "";
+        const mini = firstLine.length > 110 ? (firstLine.slice(0, 110).trim() + "…") : (firstLine || "En güncel sürüm hazır.");
+
+        verText.textContent = tag;
+        verBadge.textContent = tag;
+        releaseName.textContent = name;
+        dateBadge.textContent = date ? fmtDate(date) : "—";
+        releaseDateChip.textContent = date ? ("📅 " + fmtDate(date)) : "📅 —";
+        releaseNotesMini.textContent = mini;
+
+        statusBadge.textContent = "OK";
+
+        // Ana indirme butonunu release sayfasına bağla
+        btnPrimaryDownload.href = "#indir";
+
+        const assets = Array.isArray(data.assets) ? data.assets : [];
+
+        // Windows: exe/msi öncelik
+        const win = pickAsset(assets, ["\\.msi$", "\\.exe$"]);
+        if(win){
+          dlWin.href = win.browser_download_url;
+          dlWinMeta.textContent = bytesToHuman(win.size);
+        }else{
+          disableButton(dlWin, dlWinMeta, "exe/msi yok");
+        }
+
+        // macOS: dmg/zip
+        const mac = pickAsset(assets, ["\\.dmg$", "\\.zip$"]);
+        if(mac){
+          dlMac.href = mac.browser_download_url;
+          dlMacMeta.textContent = bytesToHuman(mac.size);
+        }else{
+          disableButton(dlMac, dlMacMeta, "dmg/zip yok");
+        }
+
+        // Linux: AppImage/deb
+        const lin = pickAsset(assets, ["\\.AppImage$", "\\.deb$"]);
+        if(lin){
+          dlLin.href = lin.browser_download_url;
+          dlLinMeta.textContent = bytesToHuman(lin.size);
+        }else{
+          disableButton(dlLin, dlLinMeta, "AppImage/deb yok");
+        }
+
+      }catch(err){
+        console.warn(err);
+        statusBadge.textContent = "Fallback";
+        verText.textContent = "—";
+        verBadge.textContent = "—";
+        dateBadge.textContent = "—";
+        releaseName.textContent = "Releases";
+        releaseNotesMini.textContent = "GitHub API erişilemedi. Releases sayfasından manuel indir.";
+        releaseDateChip.textContent = "📅 —";
+
+        const releasePage = `https://github.com/${OWNER}/${REPO}/releases`;
+        btnPrimaryDownload.href = releasePage;
+        btnReleasePage.href = releasePage;
+
+        disableButton(dlWin, dlWinMeta, "API yok");
+        disableButton(dlMac, dlMacMeta, "API yok");
+        disableButton(dlLin, dlLinMeta, "API yok");
+      }
+    }
+
+    // yıl
+    el("year").textContent = new Date().getFullYear();
+
+    // yükle
+    loadLatestRelease();
+  </script>
+</body>
 </html>
