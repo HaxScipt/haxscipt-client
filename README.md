@@ -3,20 +3,12 @@
 <h1>🚀 HaxScipt Client</h1>
 
 <p>
-  <a href="https://github.com/haxscipt/haxscipt-client/releases">
-    <img src="https://img.shields.io/github/v/release/haxscipt/haxscipt-client?style=for-the-badge&color=ffd700&label=SON%20SÜRÜM" alt="Latest Release">
-  </a>
-  <a href="https://github.com/haxscipt/haxscipt-client/releases">
-    <img src="https://img.shields.io/github/downloads/haxscipt/haxscipt-client/total?style=for-the-badge&color=00e5ff&label=İNDİRME" alt="Downloads">
-  </a>
+  <img src="https://img.shields.io/badge/SON%20SÜRÜM-v1.0-ffd700?style=for-the-badge&labelColor=black" alt="Version">
+  <img src="https://img.shields.io/badge/DURUM-AKTİF-2ea44f?style=for-the-badge&labelColor=black" alt="Status">
+  <img src="https://img.shields.io/badge/PLATFORM-WIN%20%7C%20MAC%20%7C%20LINUX-00e5ff?style=for-the-badge&labelColor=black" alt="Platform">
   <a href="https://discord.gg/haxscipt">
-    <img src="https://img.shields.io/discord/SUNUCU_ID_BURAYA?style=for-the-badge&color=5865F2&label=DISCORD&logo=discord&logoColor=white" alt="Discord">
+    <img src="https://img.shields.io/badge/DISCORD-KATIL-5865F2?style=for-the-badge&logo=discord&logoColor=white&labelColor=black" alt="Discord">
   </a>
-</p>
-
-<p>
-  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=for-the-badge" alt="Platform">
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge" alt="Status">
 </p>
 
 <br>
@@ -33,7 +25,11 @@
 
 <br>
 
+<img src="https://i.imgur.com/QPvaf2g.png" width="100%" style="border-radius: 12px; box-shadow: 0 0 25px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1);">
+
 </div>
+
+<br>
 
 ---
 
@@ -86,10 +82,10 @@ Bu proje **HaxScipt** topluluğu için geliştirilmektedir. Bize destek olmak i�
 
 <div align="center">
   <a href="https://discord.gg/haxscipt">
-    <img src="https://img.shields.io/badge/💬-Discord'a%20Katıl-5865F2?style=for-the-badge&logo=discord&logoColor=white">
+    <img src="https://img.shields.io/badge/💬-Discord'a%20Katıl-5865F2?style=for-the-badge&logo=discord&logoColor=white&labelColor=black">
   </a>
   <a href="mailto:haxscipt@gmail.com">
-    <img src="https://img.shields.io/badge/📧-İletişim-red?style=for-the-badge">
+    <img src="https://img.shields.io/badge/📧-İletişim-red?style=for-the-badge&labelColor=black">
   </a>
 </div>
 
@@ -102,7 +98,7 @@ Bu proje **HaxScipt** topluluğu için geliştirilmektedir. Bize destek olmak i�
     </a>
   </p>
   <br>
-  <img src="https://img.shields.io/badge/📜-MIT%20Lisansı-lightgrey?style=for-the-badge">
+  <img src="https://img.shields.io/badge/📜-MIT%20Lisansı-lightgrey?style=for-the-badge&labelColor=black">
   <br>
   <small>© 2026 HaxScipt. Haxball, Mario Carbajal'ın tescilli markasıdır.</small>
 </div>
