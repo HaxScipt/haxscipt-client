@@ -44,7 +44,7 @@ Bu proje, standart tarayıcıların hantallığından kurtulup, **Real Soccer** 
 
 ### 🧿 Temel Özellikler
 * **🟢 HaxScipt Hızlı Erişim:** Odaları listede aramaya son. Panelden tek tıkla HaxScipt sunucularına en hızlı yoldan bağlan.
-* **🔗 Gelişmiş Discord RPC:** Oyundaki durumun (Skor, Oda Bilgisi) Discord profilinde anlık görünür.
+* **🔗 Gelişmiş Discord RPC:** Oyundaki durumun (Oda Bilgisi) Discord profilinde anlık görünür.
 * **🛡️ Güvenlik Kalkanı:** Geliştirilmiş hile ve zararlı eklenti engelleme sistemi ile adil oyun.
 * **🎨 Kişiselleştirme:** Karanlık mod, özel temalar ve profil adlandırma sistemi.
 
