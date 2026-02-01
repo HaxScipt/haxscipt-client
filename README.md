@@ -43,7 +43,7 @@ Bu proje, standart tarayıcıların hantallığından kurtulup, **Real Soccer** 
 * **📏 İnce Çizgi Modu (Thin Line):** Belki de dünyada tek! **`J`** tuşuna basarak veya ayarlardan açarak oyun içi çizgileri inceltebilirsin. Bu sayede hem FPS artar hem de top kontrolü keskinleşir.
 
 ### 🧿 Temel Özellikler
-* **🟢 HaxScipt Hızlı Erişim:** Sunucu IP'si aramaya son. Panelden tek tıkla HaxScipt sunucularına en hızlı yoldan bağlan.
+* **🟢 HaxScipt Hızlı Erişim:** Odaları listede aramaya son. Panelden tek tıkla HaxScipt sunucularına en hızlı yoldan bağlan.
 * **🔗 Gelişmiş Discord RPC:** Oyundaki durumun (Skor, Oda Bilgisi) Discord profilinde anlık görünür.
 * **🛡️ Güvenlik Kalkanı:** Geliştirilmiş hile ve zararlı eklenti engelleme sistemi ile adil oyun.
 * **🎨 Kişiselleştirme:** Karanlık mod, özel temalar ve profil adlandırma sistemi.
