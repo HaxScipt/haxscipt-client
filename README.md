@@ -13,6 +13,8 @@
 
 <br>
 
+<img src="https://i.imgur.com/31G71Se.png" width="100%" style="border-radius: 12px; box-shadow: 0 0 25px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1);">
+
 <h3>
   Real Soccer ve Haxball dünyası için geliştirilmiş;<br>
   🇹🇷 <b>Türkiye'de İlk Chrome Flags Entegrasyonuna Sahip</b><br>
