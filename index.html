@@ -3,1130 +3,505 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="dark light" />
-  <title>HaxScipt Client — Resmi Real Soccer İstemcisi</title>
+  <meta name="color-scheme" content="dark" />
+  <title>HaxScipt Client — Profesyonel Real Soccer Deneyimi</title>
 
-  <meta name="description" content="HaxScipt Client, Real Soccer için geliştirilmiş resmi masaüstü istemcisi. Performans optimizasyonu, modern arayüz, otomatik güncelleme ve Discord entegrasyonu." />
+  <meta name="description" content="HaxScipt Client: Real Soccer ve Haxball için geliştirilmiş, Türkiye'de ilk Chrome Flags entegrasyonuna sahip, düşük input lag odaklı resmi istemci." />
   <meta property="og:title" content="HaxScipt Client" />
-  <meta property="og:description" content="Real Soccer için geliştirilmiş resmi istemci. Tek tıkla bağlan, daha stabil oyna." />
+  <meta property="og:description" content="İnce Çizgi Modu, Chrome Flags optimizasyonu ve HaxScipt sunucusuna tek tıkla erişim." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/og.png" />
   <meta name="theme-color" content="#0b0f1a" />
 
   <style>
     :root{
-      --bg: #070A12;
-      --panel: rgba(255,255,255,.06);
-      --panel2: rgba(255,255,255,.08);
-      --stroke: rgba(255,255,255,.10);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.68);
-      --muted2: rgba(255,255,255,.52);
-      --shadow: 0 18px 50px rgba(0,0,0,.55);
-      --radius: 18px;
-      --radius2: 26px;
-      --max: 1120px;
-
-      --brandA: #F6C24A;
-      --brandB: #FFD86A;
-      --accent: #6EE7FF;
-      --accent2:#A78BFA;
-      --ok: #22c55e;
-      --warn: #f59e0b;
-      --bad: #ef4444;
-
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      /* Ana Renk Paleti: Dark Gaming Tema */
+      --bg: #050505;
+      --panel: rgba(255,255,255,.03);
+      --panel-border: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.94);
+      --muted: rgba(255,255,255,.60);
+      
+      /* Marka Renkleri (Neon Gold & Electric Blue) */
+      --brand: #FFD700;       /* Altın Sarısı (Haxball Topu gibi) */
+      --brand-glow: rgba(255, 215, 0, 0.4);
+      --accent: #00E5FF;      /* Elektrik Mavisi */
+      --accent-glow: rgba(0, 229, 255, 0.4);
+      
+      --radius: 20px;
+      --max-width: 1200px;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
-    *{ box-sizing: border-box; }
-    html,body{ height: 100%; }
-    body{
-      margin:0;
-      font-family: var(--sans);
+    * { box-sizing: border-box; outline: none; }
+    
+    html { scroll-behavior: smooth; }
+    
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background-color: var(--bg);
       color: var(--text);
-      background: radial-gradient(1200px 800px at 20% -10%, rgba(246,194,74,.16), transparent 55%),
-                  radial-gradient(900px 700px at 80% 10%, rgba(110,231,255,.14), transparent 55%),
-                  radial-gradient(900px 700px at 60% 110%, rgba(167,139,250,.12), transparent 55%),
-                  var(--bg);
+      /* Arka plan: Derinlik katan gradientler */
+      background-image: 
+        radial-gradient(circle at 15% 0%, rgba(0, 229, 255, 0.08), transparent 40%),
+        radial-gradient(circle at 85% 100%, rgba(255, 215, 0, 0.06), transparent 40%);
       overflow-x: hidden;
     }
 
-    a{ color: inherit; text-decoration: none; }
-    a:hover{ text-decoration: underline; text-decoration-color: rgba(255,255,255,.35); }
-
-    /* background grid + noise */
-    .bg-grid{
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-      background-size: 44px 44px;
-      opacity: .12;
-      mask-image: radial-gradient(65% 50% at 50% 30%, #000 35%, transparent 70%);
-    }
-    .bg-noise{
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .08;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
+    /* Grid Deseni */
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: -1;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
     }
 
-    .wrap{ width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    a { text-decoration: none; color: inherit; transition: .2s; }
+    
+    .container {
+      width: min(100% - 40px, var(--max-width));
+      margin: 0 auto;
+    }
 
-    /* topbar */
-    .topbar{
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(14px);
-      background: linear-gradient(to bottom, rgba(7,10,18,.82), rgba(7,10,18,.55));
-      border-bottom: 1px solid rgba(255,255,255,.08);
+    /* --- Header --- */
+    header {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--panel-border);
+      background: rgba(5, 5, 5, 0.7);
     }
-    .nav{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 14px 0;
+    .nav {
+      height: 70px; display: flex; align-items: center; justify-content: space-between;
     }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      min-width: 180px;
+    .logo {
+      font-weight: 800; font-size: 20px; letter-spacing: -0.5px;
+      background: linear-gradient(to right, #fff, var(--brand));
+      -webkit-background-clip: text; color: transparent;
+      display: flex; align-items: center; gap: 10px;
     }
-    .logo{
-      width: 38px; height: 38px; border-radius: 12px;
-      background: linear-gradient(135deg, rgba(246,194,74,1), rgba(110,231,255,.9));
-      box-shadow: 0 10px 30px rgba(246,194,74,.12);
+    .logo span {
+      background: rgba(255, 215, 0, 0.1);
+      color: var(--brand);
+      font-size: 11px; padding: 4px 8px; border-radius: 6px; letter-spacing: 0;
+    }
+    .menu { display: flex; gap: 24px; font-size: 14px; font-weight: 500; color: var(--muted); }
+    .menu a:hover { color: #fff; }
+    
+    @media (max-width: 768px) { .menu { display: none; } }
+
+    /* --- Buttons --- */
+    .btn {
+      padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 14px;
+      display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+      border: 1px solid transparent; transition: all .3s ease;
+    }
+    .btn-primary {
+      background: var(--brand);
+      color: #000;
+      box-shadow: 0 0 20px var(--brand-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px var(--brand-glow);
+      background: #ffdb1a;
+    }
+    .btn-glass {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .btn-glass:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.25);
+    }
+
+    /* --- Hero Section --- */
+    .hero {
+      padding: 160px 0 80px;
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center;
+    }
+    .hero-content h1 {
+      font-size: clamp(40px, 5vw, 64px); line-height: 1.1; margin: 0 0 24px;
+      letter-spacing: -1.5px;
+    }
+    .hero-content h1 span {
+      color: var(--accent);
+      text-shadow: 0 0 30px var(--accent-glow);
+    }
+    .hero-content p {
+      font-size: 18px; line-height: 1.6; color: var(--muted); margin-bottom: 32px;
+      max-width: 540px;
+    }
+    
+    .badge-new {
+      display: inline-block; padding: 6px 12px; border-radius: 20px;
+      background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.2);
+      color: var(--accent); font-size: 12px; font-weight: 600; margin-bottom: 20px;
+    }
+
+    /* Preview Card (Sağ taraf) */
+    .client-mockup {
       position: relative;
+      background: rgba(20, 20, 25, 0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      aspect-ratio: 16/10;
       overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+      animation: float 6s ease-in-out infinite;
     }
-    .logo:after{
-      content:"";
-      position:absolute; inset:-40%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 50%);
-      transform: rotate(20deg);
+    .client-mockup img {
+      width: 100%; height: 100%; object-fit: cover;
+      mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
     }
-    .brand h1{
-      margin: 0;
-      font-size: 14px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.85);
+    .mockup-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px;
+      background: linear-gradient(to top, #000, transparent);
+      display: flex; gap: 10px;
     }
-    .brand span{
-      display:block;
-      font-size: 12px;
-      color: var(--muted2);
-      letter-spacing: .02em;
-      text-transform: none;
-      margin-top: 2px;
+    .feature-chip {
+      font-size: 11px; padding: 6px 10px; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(4px);
     }
 
-    .menu{
-      display:flex;
-      align-items:center;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .menu a{
-      font-size: 13px;
-      color: var(--muted);
-      padding: 10px 10px;
-      border-radius: 12px;
-    }
-    .menu a:hover{
-      background: rgba(255,255,255,.05);
-      text-decoration: none;
-      color: rgba(255,255,255,.88);
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
 
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 10px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 13px;
-      text-decoration: none !important;
-      box-shadow: 0 10px 40px rgba(0,0,0,.28);
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
-      cursor: pointer;
-      user-select: none;
-    }
-    .btn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.08);
-      border-color: rgba(255,255,255,.18);
-    }
-    .btn.primary{
-      border: 1px solid rgba(246,194,74,.35);
-      background: linear-gradient(135deg, rgba(246,194,74,.18), rgba(110,231,255,.10));
-    }
-    .btn.primary:hover{
-      border-color: rgba(246,194,74,.55);
-      background: linear-gradient(135deg, rgba(246,194,74,.22), rgba(110,231,255,.13));
-    }
-    .btn.ghost{
-      background: transparent;
-      box-shadow: none;
-      border-color: rgba(255,255,255,.10);
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding-top: 120px; }
+      .hero-content h1, .hero-content p { margin-left: auto; margin-right: auto; }
+      .btn-group { justify-content: center; }
     }
 
-    /* hero */
-    .hero{
-      padding: 56px 0 24px;
-      position: relative;
+    /* --- Features Grid --- */
+    .features { padding: 80px 0; }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;
     }
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 26px;
-      align-items: stretch;
+    .card {
+      background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+      border: 1px solid var(--panel-border);
+      padding: 30px; border-radius: 20px;
+      transition: .3s;
+      position: relative; overflow: hidden;
     }
-    .kicker{
-      display:inline-flex;
-      gap: 10px;
-      align-items:center;
-      color: rgba(255,255,255,.80);
-      font-size: 12px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      width: fit-content;
+    .card:hover {
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-5px);
+      background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
     }
-    .dot{
-      width: 8px; height: 8px; border-radius: 99px;
-      background: var(--ok);
-      box-shadow: 0 0 0 6px rgba(34,197,94,.12);
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0; transition: .3s;
     }
-    .hero h2{
-      margin: 16px 0 10px;
-      font-size: clamp(30px, 4vw, 46px);
-      line-height: 1.08;
-      letter-spacing: -0.02em;
+    .card:hover::before { opacity: 1; }
+    
+    .card-icon {
+      font-size: 32px; margin-bottom: 20px;
+      display: inline-block; padding: 12px;
+      background: rgba(255,255,255,0.05); border-radius: 12px;
     }
-    .grad{
-      background: linear-gradient(90deg, rgba(246,194,74,1), rgba(110,231,255,1), rgba(167,139,250,1));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .hero p{
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.7;
-      max-width: 52ch;
-    }
-    .cta{
-      display:flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-      align-items: center;
-    }
-    .meta-row{
-      display:flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-      color: var(--muted2);
-      font-size: 12px;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      padding: 10px 12px;
-      border-radius: 999px;
-    }
-    .pill code{
-      font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(255,255,255,.82);
-    }
+    .card h3 { margin: 0 0 10px; font-size: 18px; color: #fff; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
 
-    /* preview */
-    .preview{
-      border-radius: var(--radius2);
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-      min-height: 320px;
+    /* --- Download Section --- */
+    .download-area {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 40px;
+      margin-top: 60px;
+      display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between;
     }
-    .preview-top{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
-    }
-    .traffic{
-      display:flex;
-      gap: 8px;
-      align-items:center;
-    }
-    .traffic i{
-      width: 10px; height: 10px; border-radius: 99px; display:inline-block;
-      background: rgba(255,255,255,.18);
-    }
-    .traffic i:nth-child(1){ background: rgba(239,68,68,.55); }
-    .traffic i:nth-child(2){ background: rgba(245,158,11,.55); }
-    .traffic i:nth-child(3){ background: rgba(34,197,94,.55); }
-    .preview-top .tag{
-      font-size: 12px;
-      color: rgba(255,255,255,.72);
-      letter-spacing: .02em;
-    }
-    .shot{
-      position: relative;
-      height: calc(100% - 48px);
-      background:
-        radial-gradient(600px 240px at 30% 20%, rgba(246,194,74,.12), transparent 55%),
-        radial-gradient(500px 260px at 80% 30%, rgba(110,231,255,.12), transparent 55%),
-        radial-gradient(600px 260px at 50% 110%, rgba(167,139,250,.12), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-    }
-    .shot-inner{
-      width: 100%;
-      max-width: 480px;
-      aspect-ratio: 16 / 10;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.25);
-      overflow:hidden;
-      position: relative;
-    }
-    .shot-inner img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display:block;
-      opacity: .92;
-    }
-    .shot-overlay{
-      position:absolute;
-      left: 16px;
-      bottom: 14px;
-      right: 16px;
-      display:flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-    }
-    .hud{
-      display:flex; gap: 10px; flex-wrap: wrap;
-    }
-    .hud .chip{
-      font-size: 11px;
-      color: rgba(255,255,255,.80);
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.28);
-      padding: 8px 10px;
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
-    }
-
-    /* sections */
-    section{
-      padding: 34px 0;
-    }
-    .section-title{
-      display:flex;
-      align-items:flex-end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 16px;
-    }
-    .section-title h3{
-      margin:0;
-      font-size: 18px;
-      letter-spacing: -0.01em;
-    }
-    .section-title p{
-      margin:0;
-      color: var(--muted2);
-      font-size: 13px;
-      line-height: 1.6;
-      max-width: 64ch;
-    }
-
-    .cards{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-    }
-    .card{
-      grid-column: span 4;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
+    .dl-info h2 { font-size: 28px; margin: 0 0 10px; }
+    .dl-tags { display: flex; gap: 12px; margin-bottom: 20px; }
+    .tag { font-size: 12px; padding: 4px 10px; background: #1a1d24; border-radius: 6px; color: #aaa; }
+    
+    .dl-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+    .dl-btn {
+      min-width: 160px;
       padding: 16px;
-      box-shadow: 0 18px 40px rgba(0,0,0,.25);
-      position: relative;
-      overflow: hidden;
-      min-height: 132px;
-    }
-.card{
-  grid-column: span 4;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.05);
-  padding: 16px;
-  box-shadow: 0 18px 40px rgba(0,0,0,.25);
-  position: relative;
-  overflow: hidden;
-  min-height: 132px;
-}
-
-/* Kart içi: sabit, orantılı gradient (kayma yok) */
-.card::before{
-  content:"";
-  position:absolute;
-  inset: 0;
-  pointer-events:none;
-  opacity: .95;
-  background:
-    radial-gradient(120% 120% at 110% 18%, rgba(110,231,255,.18), transparent 55%),
-    radial-gradient(120% 120% at -10% 12%, rgba(246,194,74,.14), transparent 55%),
-    radial-gradient(120% 120% at 55% 125%, rgba(167,139,250,.12), transparent 60%);
-}
-
-/* Kart dışına taşan glow: panelin biraz dışına çıkar (senin istediğin) */
-.card::after{
-  content:"";
-  position:absolute;
-  inset: -32px;              /* ✅ taşma miktarı (bunu arttır/azalt) */
-  pointer-events:none;
-  opacity: .28;              /* ✅ glow şiddeti */
-  filter: blur(22px);        /* ✅ yumuşaklık */
-  background:
-    radial-gradient(60% 55% at 80% 35%, rgba(110,231,255,.55), transparent 60%),
-    radial-gradient(55% 55% at 25% 35%, rgba(246,194,74,.45), transparent 62%);
-}
-
-/* İçerik glow'un üstünde kalsın */
-.card > *{
-  position: relative;
-  z-index: 1;
-}
-    .card h4{
-      margin: 2px 0 8px;
-      font-size: 15px;
-    }
-    .card p{
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.65;
-    }
-    .icon{
-      width: 38px; height: 38px;
-      border-radius: 14px;
-      display:flex; align-items:center; justify-content:center;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.22);
-      margin-bottom: 10px;
-      font-size: 18px;
-    }
-
-    /* download panel */
-    .download{
-      border-radius: var(--radius2);
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .download-head{
-      padding: 18px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      display:flex;
-      gap: 16px;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    .download-head .left h3{
-      margin:0 0 6px;
-      font-size: 18px;
-    }
-    .download-head .left .sub{
-      margin:0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    .status{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-    }
-    .badge{
-      display:inline-flex;
-      gap: 8px;
-      align-items:center;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
-      color: rgba(255,255,255,.82);
-      font-size: 12px;
-    }
-    .badge b{
-      font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(255,255,255,.88);
-      font-weight: 700;
-    }
-
-    .download-body{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 0;
-    }
-    .dl-left{
-      padding: 18px;
-      border-right: 1px solid rgba(255,255,255,.08);
-    }
-    .dl-right{
-      padding: 18px;
-    }
-    .dl-grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .dl-tile{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      padding: 14px;
-      min-height: 104px;
-      display:flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .dl-tile h5{
-      margin:0;
-      font-size: 13px;
-      color: rgba(255,255,255,.86);
-    }
-    .dl-tile p{
-      margin: 6px 0 0;
-      font-size: 12px;
-      color: var(--muted2);
-      line-height: 1.55;
-    }
-    .dl-actions{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .list{
-      margin: 10px 0 0;
-      padding-left: 18px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.8;
-    }
-    .list li{ margin: 3px 0; }
-    .mono{
-      font-family: var(--mono);
-      font-size: 12px;
-      color: rgba(255,255,255,.80);
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.10);
-      padding: 6px 9px;
-      border-radius: 10px;
-    }
-
-    /* faq */
-    details{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 16px;
-      padding: 14px;
-    }
-    details + details{ margin-top: 12px; }
-    summary{
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      display: flex; flex-direction: column; gap: 4px;
       cursor: pointer;
-      font-weight: 700;
-      color: rgba(255,255,255,.86);
-      outline: none;
     }
-    details p{
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-    }
+    .dl-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--brand); }
+    .dl-btn span { font-size: 12px; color: var(--muted); }
+    .dl-btn strong { color: #fff; }
 
-    /* footer */
-    footer{
-      padding: 30px 0 44px;
-      color: var(--muted2);
-      font-size: 12px;
+    /* --- Footer --- */
+    footer {
+      border-top: 1px solid var(--panel-border);
+      padding: 40px 0; margin-top: 80px; text-align: center; color: var(--muted); font-size: 13px;
     }
-    .foot{
-      display:flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      align-items:center;
-      justify-content: space-between;
-      border-top: 1px solid rgba(255,255,255,.08);
-      padding-top: 18px;
-    }
-    .foot .links{
-      display:flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .small{ font-size: 12px; color: var(--muted2); }
+    footer a:hover { text-decoration: underline; color: var(--brand); }
 
-    /* responsiveness */
-    @media (max-width: 980px){
-      .hero-grid{ grid-template-columns: 1fr; }
-      .download-body{ grid-template-columns: 1fr; }
-      .dl-left{ border-right: none; border-bottom: 1px solid rgba(255,255,255,.08); }
-      .cards .card{ grid-column: span 6; }
-    }
-    @media (max-width: 640px){
-      .menu{ display:none; }
-      .cards .card{ grid-column: span 12; }
-      .dl-grid{ grid-template-columns: 1fr; }
-      .wrap{ width: min(var(--max), calc(100% - 28px)); }
-      .hero{ padding-top: 34px; }
-    }
-
-    /* subtle animated glow */
-    @media (prefers-reduced-motion: no-preference){
-      .logo, .card, .download, .preview{
-        will-change: transform;
-      }
-      .floaty{
-        animation: floaty 8s ease-in-out infinite;
-      }
-      @keyframes floaty{
-        0%,100%{ transform: translateY(0px); }
-        50%{ transform: translateY(-6px); }
-      }
-    }
+    /* Utility */
+    .highlight { color: var(--brand); font-weight: 700; }
   </style>
 </head>
-
 <body>
-  <div class="bg-grid"></div>
-  <div class="bg-noise"></div>
 
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div class="wrap">
-      <div class="nav">
-        <a class="brand" href="#top" aria-label="HaxScipt Client ana sayfa">
-          <div class="logo" aria-hidden="true"></div>
-          <div>
-            <h1>HaxScipt Client</h1>
-            <span>Real Soccer için resmi istemci</span>
-          </div>
-        </a>
+  <div class="grid-bg"></div>
 
-        <nav class="menu" aria-label="Sayfa menüsü">
-          <a href="#ozellikler">Özellikler</a>
-          <a href="#indir">İndir</a>
-          <a href="#sss">SSS</a>
-          <a href="https://github.com/haxscipt/haxscipt-client" target="_blank" rel="noreferrer">GitHub</a>
-        </nav>
-
-        <div style="display:flex; gap:10px; align-items:center;">
-          <a class="btn ghost" href="https://discord.gg/haxscipt" target="_blank" rel="noreferrer" aria-label="Discord'a katıl">
-            💬 Discord
-          </a>
-          <a class="btn primary" href="#indir" aria-label="İndir bölümüne git">
-            ⬇️ İndir
-          </a>
-        </div>
-      </div>
+  <header>
+    <div class="container nav">
+      <a href="#" class="logo">
+        HaxScipt <span>CLIENT</span>
+      </a>
+      <nav class="menu">
+        <a href="#features">Özellikler</a>
+        <a href="#download">İndir</a>
+        <a href="https://discord.gg/haxscipt" target="_blank">Discord</a>
+        <a href="https://github.com/haxscipt/haxscipt-client" target="_blank">GitHub</a>
+      </nav>
+      <a href="#download" class="btn btn-primary">
+        Hemen İndir
+      </a>
     </div>
-  </div>
+  </header>
 
-  <!-- HERO -->
-  <main id="top" class="wrap">
-    <header class="hero">
-      <div class="hero-grid">
-        <div>
-          <div class="kicker">
-            <span class="dot" aria-hidden="true"></span>
-            Stabil • Hızlı • Real Soccer odaklı
-          </div>
+  <main>
+    <section class="container hero">
+      <div class="hero-content">
+        <div class="badge-new">✨ Yeni: İnce Çizgi Modu Yayında!</div>
+        <h1>
+          Sınırları Kaldır,<br>
+          <span style="color:var(--brand)">Sahaya Hükmet.</span>
+        </h1>
+        <p>
+          HaxScipt Sunucusu için özel olarak optimize edildi. 
+          Türkiye'de ilk kez sunulan <strong>Chrome Flags entegrasyonu</strong> ile input lag'ı sıfıra indir, 
+          <strong>İnce Çizgi Modu</strong> ile görüşünü netleştir.
+        </p>
+        <div class="btn-group" style="display:flex; gap:16px;">
+          <a href="#download" class="btn btn-primary">
+            💻 Client'i İndir
+          </a>
+          <a href="https://github.com/haxscipt/haxscipt-client" target="_blank" class="btn btn-glass">
+            Geliştirici Notları
+          </a>
+        </div>
+      </div>
 
-          <h2>
-            Real Soccer deneyimini<br />
-            <span class="grad">tek tıkla</span> üst seviyeye taşı.
-          </h2>
+      <div class="client-mockup">
+        <img 
+          src="https://i.imgur.com/QPvaf2g.png" 
+          onerror="this.style.display='none'" 
+          alt="HaxScipt Client Arayüzü"
+        >
 
+        <div class="mockup-overlay">
+          <span class="feature-chip">⚡ 0 Input Lag</span>
+          <span class="feature-chip">🎯 Thin Line Mode</span>
+          <span class="feature-chip">🔥 144+ FPS</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="container features">
+      <div style="text-align:center; margin-bottom: 50px;">
+        <h2 style="font-size:32px; margin-bottom:10px;">Neden HaxScipt Client?</h2>
+        <p style="color:var(--muted)">Sıradan tarayıcılardan çok daha fazlası.</p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">🚀</div>
+          <h3>Chrome Flags Entegrasyonu</h3>
           <p>
-            HaxScipt Client; performans optimizasyonları, modern arayüz, otomatik güncellemeler ve Discord entegrasyonu ile
-            Real Soccer’da daha stabil, daha akıcı bir deneyim sunar.
+            Türkiye'de bir ilk! Tarayıcının derinliklerindeki ayarları client içine gömdük. 
+            Oyuncu kendi ayarlarıyla input lag değerlerini en dibe çekebilir.
           </p>
-
-          <div class="cta">
-            <a class="btn primary" id="btnPrimaryDownload" href="#indir">
-              ⚡ En Güncel Sürümü İndir
-            </a>
-            <a class="btn" href="https://github.com/haxscipt/haxscipt-client" target="_blank" rel="noreferrer">
-              ⭐ Projeyi Görüntüle
-            </a>
-          </div>
-
-          <div class="meta-row">
-            <div class="pill">
-              🏷️ Sürüm: <code id="verText">yükleniyor…</code>
-            </div>
-            <div class="pill">
-              🧱 Platform: <code>Windows / macOS / Linux</code>
-            </div>
-            <div class="pill">
-              🔒 Güvenlik: <code>Resmi release + checksum</code>
-            </div>
-          </div>
-
-          <div style="margin-top:12px; color: var(--muted2); font-size: 12px;">
-            İpucu: İndirme butonları otomatik olarak en güncel GitHub Release’ine bağlanır.
-          </div>
         </div>
 
-        <div class="preview floaty" aria-label="Uygulama önizleme kartı">
-          <div class="preview-top">
-            <div class="traffic" aria-hidden="true"><i></i><i></i><i></i></div>
-            <div class="tag">HaxScipt Client • Preview</div>
-          </div>
-          <div class="shot">
-            <div class="shot-inner">
-              <!-- İstersen buraya kendi screenshot'unu koy:
-                   /assets/client_preview.png
-                   veya direkt URL kullan. -->
-              <img src="assets/client_preview.png" alt="HaxScipt Client ekran görüntüsü (örnek)" onerror="this.style.display='none'; this.parentElement.style.background='rgba(0,0,0,.25)';" />
-              <div class="shot-overlay">
-                <div class="hud">
-                  <div class="chip">⚙️ FPS Optimizasyonu</div>
-                  <div class="chip">🧩 Tek Tık Bağlan</div>
-                  <div class="chip">💬 Discord RPC</div>
-                </div>
-                <div class="hud">
-                  <div class="chip" id="releaseDateChip">📅 —</div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="card">
+          <div class="card-icon">📏</div>
+          <h3>İnce Çizgi Modu (Thin Line)</h3>
+          <p>
+            Belki de dünyada tek. <strong>'J' tuşuna</strong> bas veya ayarlardan aç: 
+            Çizgiler incelir, top kontrolü artar, FPS tavan yapar. Sahayı daha net gör.
+          </p>
         </div>
 
-      </div>
-    </header>
-
-    <!-- FEATURES -->
-    <section id="ozellikler">
-      <div class="section-title">
-        <div>
-          <h3>Öne çıkan özellikler</h3>
-          <p>Hedef: Real Soccer oynarken daha stabil, daha hızlı ve daha kontrol edilebilir bir deneyim.</p>
-        </div>
-      </div>
-
-      <div class="cards">
-        <article class="card">
-          <div class="icon">⚡</div>
-          <h4>Performans Odaklı</h4>
-          <p>FPS stabilitesi ve input akıcılığı için optimize edilmiş ayarlar; gereksiz yükleri azaltan yapı.</p>
-        </article>
-
-        <article class="card">
-          <div class="icon">🧩</div>
-          <h4>Tek Tıkla Bağlan</h4>
-          <p>HaxScipt sunucularına hızlı erişim, pratik bağlantı akışı ve basit kullanım.</p>
-        </article>
-
-        <article class="card">
-          <div class="icon">🛡️</div>
-          <h4>Güncel & Güvenli</h4>
-          <p>Resmi release dağıtımı, sürüm takibi ve doğrulanabilir indirme akışı (checksum kullanımı önerilir).</p>
-        </article>
-
-        <article class="card">
-          <div class="icon">💬</div>
-          <h4>Discord Entegrasyonu</h4>
-          <p>Discord Rich Presence ile oyunda olduğun durumu göster; toplulukla daha kolay etkileşim.</p>
-        </article>
-
-        <article class="card">
-          <div class="icon">🎨</div>
-          <h4>Modern Arayüz</h4>
-          <p>Karanlık tema, temiz menü, düzenli ayarlar. “Az ama net” tasarım dili.</p>
-        </article>
-
-        <article class="card">
-          <div class="icon">🧪</div>
-          <h4>Gelişmiş Ayarlar</h4>
-          <p>Deneysel seçenekler, optimizasyon profilleri ve kullanıcı odaklı ince ayarlar.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- DOWNLOAD -->
-    <section id="indir">
-      <div class="section-title">
-        <div>
-          <h3>İndir</h3>
-          <p>En güncel sürüm otomatik bulunur. İstersen manuel olarak “Releases” sayfasından da indirebilirsin.</p>
-        </div>
-      </div>
-
-      <div class="download">
-        <div class="download-head">
-          <div class="left">
-            <h3>HaxScipt Client • <span class="grad" id="releaseName">Latest Release</span></h3>
-            <p class="sub" id="releaseNotesMini">Yükleniyor…</p>
-          </div>
-
-          <div class="status">
-            <div class="badge">Sürüm <b id="verBadge">—</b></div>
-            <div class="badge">Yayın <b id="dateBadge">—</b></div>
-            <div class="badge">Durum <b id="statusBadge">API</b></div>
-          </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3>Chromium Optimizasyonu</h3>
+          <p>
+            Gereksiz tüm servisler kapatıldı. Düşük RAM kullanımı, stabil FPS ve 
+            minimum arka plan yükü ile oyun akışın asla kesilmez.
+          </p>
         </div>
 
-        <div class="download-body">
-          <div class="dl-left">
-            <div style="display:flex; align-items:center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-              <div>
-                <div class="small">Önerilen</div>
-                <div style="font-weight: 800; font-size: 16px; margin-top: 4px;">En güncel sürüm ile başlayın</div>
-              </div>
-              <a class="btn primary" id="btnReleasePage" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
-                📦 Releases Sayfası
-              </a>
-            </div>
+        <div class="card">
+          <div class="card-icon">🎮</div>
+          <h3>Tek Tıkla Bağlan</h3>
+          <p>
+            Uzun listelerde odaları aramakla uğraşma. HaxScipt Real Soccer sunucusuna
+            entegre buton ile saniyeler içinde oyuna dahil ol.
+          </p>
+        </div>
 
-            <div class="dl-grid" style="margin-top: 14px;">
-              <div class="dl-tile">
-                <div>
-                  <h5>Windows</h5>
-                  <p>.exe / .msi (varsa otomatik listelenir)</p>
-                </div>
-                <div class="dl-actions">
-                  <a class="btn primary" id="dlWin" href="#" target="_blank" rel="noreferrer">⬇️ İndir</a>
-                  <span class="mono" id="dlWinMeta">—</span>
-                </div>
-              </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <h3>Discord Rich Presence</h3>
+          <p>
+            Oyunda olduğunu arkadaşlarına havalı bir şekilde göster. 
+            Skor durumu, oda bilgisi ve daha fazlası profilinde görünsün.
+          </p>
+        </div>
 
-              <div class="dl-tile">
-                <div>
-                  <h5>macOS</h5>
-                  <p>.dmg (varsa otomatik listelenir)</p>
-                </div>
-                <div class="dl-actions">
-                  <a class="btn primary" id="dlMac" href="#" target="_blank" rel="noreferrer">⬇️ İndir</a>
-                  <span class="mono" id="dlMacMeta">—</span>
-                </div>
-              </div>
-
-              <div class="dl-tile">
-                <div>
-                  <h5>Linux</h5>
-                  <p>.AppImage / .deb (varsa otomatik listelenir)</p>
-                </div>
-                <div class="dl-actions">
-                  <a class="btn primary" id="dlLin" href="#" target="_blank" rel="noreferrer">⬇️ İndir</a>
-                  <span class="mono" id="dlLinMeta">—</span>
-                </div>
-              </div>
-            </div>
-
-            <ul class="list">
-              <li><b>Kurulum:</b> İndirdiğin dosyayı çalıştır → “Next” → bitti.</li>
-              <li><b>Otomatik güncelleme:</b> Yeni sürüm geldiğinde uygulama içinden bildirir.</li>
-              <li><b>Manuel:</b> Releases sayfasından sürümü seçip indirebilirsin.</li>
-            </ul>
-          </div>
-
-          <div class="dl-right">
-            <div style="display:flex; align-items:center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-              <div>
-                <div class="small">Sistem Gereksinimleri</div>
-                <div style="font-weight: 800; font-size: 16px; margin-top: 4px;">Minimum</div>
-              </div>
-              <span class="mono">x64 önerilir</span>
-            </div>
-
-            <ul class="list">
-              <li>Windows 10+ / macOS 11+ / Ubuntu 20.04+ (benzeri)</li>
-              <li>4 GB RAM (8 GB önerilir)</li>
-              <li>İnternet bağlantısı (güncelleme + sunucu erişimi)</li>
-            </ul>
-
-            <div style="margin-top: 16px;">
-              <div class="small">Notlar</div>
-              <p style="margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7;">
-                Eğer otomatik indirme linkleri görünmüyorsa, release asset isimleri farklı olabilir.
-                Bu durumda Releases sayfasından manuel indirme yapabilirsin.
-              </p>
-              <div style="margin-top: 10px; display:flex; gap: 10px; flex-wrap: wrap;">
-                <a class="btn" href="https://github.com/haxscipt/haxscipt-client/issues" target="_blank" rel="noreferrer">🐞 Sorun Bildir</a>
-                <a class="btn" href="https://discord.gg/haxscipt" target="_blank" rel="noreferrer">🧑‍🤝‍🧑 Destek</a>
-              </div>
-            </div>
-          </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3>Güncel & Güvenli</h3>
+          <p>
+            Resmi release dağıtımı. Otomatik sürüm takibi ve Checksum doğrulaması ile 
+            her zaman güvendesin.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- FAQ -->
-    <section id="sss">
-      <div class="section-title">
-        <div>
-          <h3>SSS</h3>
-          <p>En çok sorulanlar. İstersen burayı tamamen kendi metinlerinle güncelleriz.</p>
+    <section id="download" class="container">
+      <div class="download-area">
+        <div class="dl-info">
+          <div class="badge-new" style="background:var(--brand); color:#000; border:none;">
+            Önerilen Sürüm
+          </div>
+          <h2 id="releaseName">Son Sürüm Yükleniyor...</h2>
+          <div class="dl-tags">
+            <span class="tag" id="verTag">vX.X.X</span>
+            <span class="tag" id="dateTag">---</span>
+            <span class="tag" style="color:var(--accent)">Stable</span>
+          </div>
+          <p style="color:var(--muted); max-width:400px;">
+            Sisteminize uygun sürümü yandaki listeden seçin. 
+            Kurulum gerektirmez, indir ve yönetici olarak çalıştır.
+          </p>
+        </div>
+
+        <div class="dl-buttons">
+          <a id="btnWin" href="#" class="dl-btn">
+            <strong>Windows</strong>
+            <span id="infoWin">.exe / .msi aranıyor...</span>
+          </a>
+          <a id="btnMac" href="#" class="dl-btn">
+            <strong>macOS</strong>
+            <span id="infoMac">.dmg / .zip aranıyor...</span>
+          </a>
+          <a id="btnLin" href="#" class="dl-btn">
+            <strong>Linux</strong>
+            <span id="infoLin">.AppImage aranıyor...</span>
+          </a>
         </div>
       </div>
 
-      <details>
-        <summary>Bu istemci ne işe yarıyor?</summary>
-        <p>
-          Real Soccer odaklı bir masaüstü istemcisi: performans odaklı ayarlar, modern arayüz, otomatik güncelleme ve topluluk entegrasyonları.
-        </p>
-      </details>
-
-      <details>
-        <summary>İndirme linkleri otomatik mi?</summary>
-        <p>
-          Evet. Sayfa, GitHub Releases API’den en güncel sürümü çeker ve uygun dosyaları (exe/msi/dmg/AppImage/deb) otomatik yakalar.
-          Dosya isimleri farklıysa Releases sayfasına yönlendirir.
-        </p>
-      </details>
-
-      <details>
-        <summary>Güvenlik için ne önerirsiniz?</summary>
-        <p>
-          Resmi release’ten indirin, mümkünse checksum doğrulayın. Şüpheli üçüncü taraf indirmelerden kaçının.
-        </p>
-      </details>
-
-      <details>
-        <summary>Siteyi GitHub Pages’a nasıl koyarım?</summary>
-        <p>
-          Repo içinde <span class="mono">index.html</span> olarak kaydet → Settings → Pages → Branch seç → kaydet.
-          Aynı klasörde <span class="mono">assets/client_preview.png</span> ekleyebilir veya görseli kaldırabilirsiniz.
-        </p>
-      </details>
+      <div style="text-align:center; margin-top:20px;">
+        <a href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" style="font-size:13px; color:var(--muted); border-bottom:1px dashed #555;">
+          Otomatik indirme başlamadı mı? Tüm sürümleri görmek için tıkla.
+        </a>
+      </div>
     </section>
 
-    <footer>
-      <div class="foot">
-        <div>
-          <div style="display:flex; gap:10px; align-items:center;">
-            <div class="logo" style="width:28px; height:28px; border-radius: 10px;"></div>
-            <div>
-              <div style="font-weight: 800; color: rgba(255,255,255,.85);">HaxScipt</div>
-              <div class="small">Real Soccer topluluğu için geliştirilir.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="links">
-          <a href="https://github.com/haxscipt/haxscipt-client" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">Releases</a>
-          <a href="https://github.com/haxscipt/haxscipt-client/issues" target="_blank" rel="noreferrer">Issues</a>
-          <a href="https://discord.gg/haxscipt" target="_blank" rel="noreferrer">Discord</a>
-        </div>
-      </div>
-
-      <div style="margin-top: 12px;" class="small">
-        © <span id="year"></span> HaxScipt • Tasarım: modern minimal + performans odaklı.
-      </div>
-    </footer>
   </main>
 
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 <strong>HaxScipt</strong>. Real Soccer topluluğu için ❤️ ile geliştirildi.</p>
+      <p style="opacity:0.5; font-size:11px;">Haxball, Mario Carbajal'ın tescilli markasıdır. Bu proje bir hayran yapımıdır.</p>
+    </div>
+  </footer>
+
   <script>
-    // ==========================
-    // AYAR: Repo bilgini gir
-    // ==========================
-    const OWNER = "haxscipt";
-    const REPO  = "haxscipt-client";
+    // Konfigürasyon
+    const USER = 'haxscipt';
+    const REPO = 'haxscipt-client';
 
-    // Sayfa elemanları
+    // Elemanlar
     const el = (id) => document.getElementById(id);
+    const releaseName = el('releaseName');
+    const verTag = el('verTag');
+    const dateTag = el('dateTag');
+    const btnWin = el('btnWin');
+    const btnMac = el('btnMac');
+    const btnLin = el('btnLin');
+    const infoWin = el('infoWin');
+    const infoMac = el('infoMac');
+    const infoLin = el('infoLin');
 
-    const verText = el("verText");
-    const verBadge = el("verBadge");
-    const dateBadge = el("dateBadge");
-    const statusBadge = el("statusBadge");
-    const releaseName = el("releaseName");
-    const releaseNotesMini = el("releaseNotesMini");
-    const releaseDateChip = el("releaseDateChip");
+    // GitHub API'den Veri Çekme
+    async function fetchLatestRelease() {
+      try {
+        const response = await fetch(`https://api.github.com/repos/${USER}/${REPO}/releases/latest`);
+        if (!response.ok) throw new Error("API Hatası");
+        
+        const data = await response.json();
+        
+        // Başlık ve Tarih Güncelleme
+        releaseName.innerText = data.name || data.tag_name;
+        verTag.innerText = data.tag_name;
+        dateTag.innerText = new Date(data.published_at).toLocaleDateString('tr-TR');
 
-    const dlWin = el("dlWin");
-    const dlMac = el("dlMac");
-    const dlLin = el("dlLin");
+        // Assetleri Bulma Fonksiyonu
+        const findAsset = (patterns) => {
+          return data.assets.find(asset => patterns.some(regex => new RegExp(regex, 'i').test(asset.name)));
+        };
 
-    const dlWinMeta = el("dlWinMeta");
-    const dlMacMeta = el("dlMacMeta");
-    const dlLinMeta = el("dlLinMeta");
+        // Windows
+        const winAsset = findAsset(['\\.exe$', '\\.msi$']);
+        if (winAsset) {
+          btnWin.href = winAsset.browser_download_url;
+          infoWin.innerText = `İndir (${(winAsset.size / 1024 / 1024).toFixed(1)} MB)`;
+          btnWin.style.borderColor = "var(--brand)";
+        } else {
+          infoWin.innerText = "Yayınlanmadı";
+          btnWin.style.opacity = "0.5";
+          btnWin.style.pointerEvents = "none";
+        }
 
-    const btnPrimaryDownload = el("btnPrimaryDownload");
-    const btnReleasePage = el("btnReleasePage");
+        // macOS
+        const macAsset = findAsset(['\\.dmg$', '\\.zip$']);
+        if (macAsset) {
+          btnMac.href = macAsset.browser_download_url;
+          infoMac.innerText = `İndir (${(macAsset.size / 1024 / 1024).toFixed(1)} MB)`;
+        } else {
+          infoMac.innerText = "Yayınlanmadı";
+          btnMac.style.opacity = "0.5";
+          btnMac.style.pointerEvents = "none";
+        }
 
-    function fmtDate(iso){
-      try{
-        const d = new Date(iso);
-        return d.toLocaleDateString("tr-TR", { year:"numeric", month:"long", day:"2-digit" });
-      }catch(e){
-        return "—";
+        // Linux
+        const linAsset = findAsset(['\\.AppImage$', '\\.deb$']);
+        if (linAsset) {
+          btnLin.href = linAsset.browser_download_url;
+          infoLin.innerText = `İndir (${(linAsset.size / 1024 / 1024).toFixed(1)} MB)`;
+        } else {
+          infoLin.innerText = "Yayınlanmadı";
+          btnLin.style.opacity = "0.5";
+          btnLin.style.pointerEvents = "none";
+        }
+
+      } catch (error) {
+        console.error(error);
+        releaseName.innerText = "API Bağlantı Hatası";
+        // Hata durumunda manuel linke yönlendir
+        const fallbackUrl = `https://github.com/${USER}/${REPO}/releases`;
+        btnWin.href = fallbackUrl; infoWin.innerText = "Manuel İndir";
+        btnMac.href = fallbackUrl; infoMac.innerText = "Manuel İndir";
+        btnLin.href = fallbackUrl; infoLin.innerText = "Manuel İndir";
       }
     }
 
-    function pickAsset(assets, patterns){
-      // patterns: ["\\.exe$", "\\.msi$"] gibi regex stringleri
-      for(const p of patterns){
-        const re = new RegExp(p, "i");
-        const hit = assets.find(a => re.test(a.name));
-        if(hit) return hit;
-      }
-      return null;
-    }
-
-    function bytesToHuman(bytes){
-      if(!bytes && bytes !== 0) return "—";
-      const units = ["B","KB","MB","GB"];
-      let v = bytes, u = 0;
-      while(v >= 1024 && u < units.length - 1){ v/=1024; u++; }
-      return `${v.toFixed(v >= 10 || u === 0 ? 0 : 1)} ${units[u]}`;
-    }
-
-    function disableButton(btn, metaEl, text){
-      btn.href = `https://github.com/${OWNER}/${REPO}/releases`;
-      btn.textContent = "Releases'a Git";
-      btn.classList.remove("primary");
-      btn.classList.add("btn");
-      metaEl.textContent = text || "asset yok";
-    }
-
-    async function loadLatestRelease(){
-      const api = `https://api.github.com/repos/${OWNER}/${REPO}/releases/latest`;
-
-      // fallback linkler
-      const releasePage = `https://github.com/${OWNER}/${REPO}/releases`;
-      btnReleasePage.href = releasePage;
-
-      try{
-        statusBadge.textContent = "Yükleniyor";
-        const res = await fetch(api, { headers: { "Accept": "application/vnd.github+json" }});
-        if(!res.ok) throw new Error("GitHub API error: " + res.status);
-        const data = await res.json();
-
-        const tag = data.tag_name || "latest";
-        const name = data.name || tag;
-        const date = data.published_at || data.created_at || null;
-
-        // küçük release notu (ilk cümle)
-        const body = (data.body || "").trim();
-        const firstLine = body.split("\n").find(l => l.trim().length) || "";
-        const mini = firstLine.length > 110 ? (firstLine.slice(0, 110).trim() + "…") : (firstLine || "En güncel sürüm hazır.");
-
-        verText.textContent = tag;
-        verBadge.textContent = tag;
-        releaseName.textContent = name;
-        dateBadge.textContent = date ? fmtDate(date) : "—";
-        releaseDateChip.textContent = date ? ("📅 " + fmtDate(date)) : "📅 —";
-        releaseNotesMini.textContent = mini;
-
-        statusBadge.textContent = "OK";
-
-        // Ana indirme butonunu release sayfasına bağla
-        btnPrimaryDownload.href = "#indir";
-
-        const assets = Array.isArray(data.assets) ? data.assets : [];
-
-        // Windows: exe/msi öncelik
-        const win = pickAsset(assets, ["\\.msi$", "\\.exe$"]);
-        if(win){
-          dlWin.href = win.browser_download_url;
-          dlWinMeta.textContent = bytesToHuman(win.size);
-        }else{
-          disableButton(dlWin, dlWinMeta, "exe/msi yok");
-        }
-
-        // macOS: dmg/zip
-        const mac = pickAsset(assets, ["\\.dmg$", "\\.zip$"]);
-        if(mac){
-          dlMac.href = mac.browser_download_url;
-          dlMacMeta.textContent = bytesToHuman(mac.size);
-        }else{
-          disableButton(dlMac, dlMacMeta, "dmg/zip yok");
-        }
-
-        // Linux: AppImage/deb
-        const lin = pickAsset(assets, ["\\.AppImage$", "\\.deb$"]);
-        if(lin){
-          dlLin.href = lin.browser_download_url;
-          dlLinMeta.textContent = bytesToHuman(lin.size);
-        }else{
-          disableButton(dlLin, dlLinMeta, "AppImage/deb yok");
-        }
-
-      }catch(err){
-        console.warn(err);
-        statusBadge.textContent = "Fallback";
-        verText.textContent = "—";
-        verBadge.textContent = "—";
-        dateBadge.textContent = "—";
-        releaseName.textContent = "Releases";
-        releaseNotesMini.textContent = "GitHub API erişilemedi. Releases sayfasından manuel indir.";
-        releaseDateChip.textContent = "📅 —";
-
-        const releasePage = `https://github.com/${OWNER}/${REPO}/releases`;
-        btnPrimaryDownload.href = releasePage;
-        btnReleasePage.href = releasePage;
-
-        disableButton(dlWin, dlWinMeta, "API yok");
-        disableButton(dlMac, dlMacMeta, "API yok");
-        disableButton(dlLin, dlLinMeta, "API yok");
-      }
-    }
-
-    // yıl
-    el("year").textContent = new Date().getFullYear();
-
-    // yükle
-    loadLatestRelease();
+    // Sayfa Yüklendiğinde Çalıştır
+    fetchLatestRelease();
   </script>
 </body>
 </html>
