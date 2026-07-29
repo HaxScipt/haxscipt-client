@@ -238,36 +238,12 @@
     }
 
     .brand-mark {
-      position: relative;
-      width: 31px;
-      height: 31px;
-      flex: 0 0 31px;
-      overflow: hidden;
-      border: 1px solid rgba(231, 255, 69, 0.44);
-      border-radius: 10px;
-      background: var(--yellow);
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      border-radius: 50%;
+      object-fit: contain;
       box-shadow: 0 0 30px rgba(231, 255, 69, 0.16);
-    }
-
-    .brand-mark::before,
-    .brand-mark::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 6px;
-      border-radius: 999px;
-      background: #08090c;
-      transform: rotate(-38deg);
-    }
-
-    .brand-mark::before {
-      top: 7px;
-      left: -2px;
-    }
-
-    .brand-mark::after {
-      right: -2px;
-      bottom: 7px;
     }
 
     .brand small {
@@ -645,6 +621,10 @@
       margin-bottom: 44px;
     }
 
+    #video .section-header {
+      margin-bottom: 82px;
+    }
+
     .section-kicker {
       margin: 0 0 13px;
       color: var(--yellow);
@@ -710,6 +690,15 @@
       gap: 11px;
       color: var(--muted-strong);
       font-size: 13px;
+    }
+
+    .feature-list li > span {
+      min-width: 0;
+    }
+
+    .feature-list li strong {
+      color: #fff;
+      font-weight: 800;
     }
 
     .feature-list li::before {
@@ -1203,43 +1192,45 @@
     }
 
     .release-meta {
-      min-width: 210px;
-      padding: 15px 17px;
+      min-width: 320px;
+      padding: 21px 23px;
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 18px;
       background: rgba(255, 255, 255, 0.035);
     }
 
     .release-meta span {
       display: block;
       color: var(--muted);
-      font-size: 9px;
+      font-size: 10px;
+      font-weight: 700;
       letter-spacing: 0.09em;
       text-transform: uppercase;
     }
 
     .release-meta strong {
       display: block;
-      margin-top: 4px;
+      margin-top: 7px;
       overflow: hidden;
-      font-size: 13px;
+      font-size: 17px;
+      line-height: 1.35;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .release-tags {
-      margin-top: 9px;
+      margin-top: 13px;
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
     }
 
     .release-tags i {
-      padding: 4px 7px;
-      border-radius: 6px;
+      padding: 5px 8px;
+      border-radius: 7px;
       background: rgba(255, 255, 255, 0.055);
       color: var(--muted-strong);
-      font-size: 8px;
+      font-size: 9px;
       font-style: normal;
     }
 
@@ -1359,6 +1350,7 @@
     }
 
     .footer-copy {
+      max-width: 850px;
       color: var(--muted);
       font-size: 10px;
     }
@@ -1639,7 +1631,13 @@
   <header class="site-header" id="siteHeader">
     <div class="container nav">
       <a class="brand" href="#top" aria-label="HaxScipt Client ana sayfa">
-        <span class="brand-mark" aria-hidden="true"></span>
+        <img
+          class="brand-mark"
+          src="https://resmim.net/cdn/2026/07/29/E3s6IC.png"
+          alt=""
+          width="38"
+          height="38"
+        >
         <span>HaxScipt</span>
         <small>Client</small>
       </a>
@@ -1771,11 +1769,11 @@
             </p>
 
             <ul class="feature-list">
-              <li>60 FPS'ten sınırsız FPS'e kadar kademeli seçim</li>
-              <li>Native, 4:3, 5:4 ve tamamen özel çözünürlük profilleri</li>
-              <li><strong>J</strong> ile Simplified lines, <strong>K</strong> ile Curves become lines</li>
-              <li>Low-latency canvas, viewport culling ve düşük kaliteli daire modu</li>
-              <li>İsim, avatar, gol animasyonu ve HUD göstergelerini ayrı ayrı yönetme</li>
+              <li><span>60 FPS'ten sınırsız FPS'e kadar kademeli seçim</span></li>
+              <li><span>Native, 4:3, 5:4 ve tamamen özel çözünürlük profilleri</span></li>
+              <li><span><strong>J</strong> ile Simplified lines, <strong>K</strong> ile Curves become lines</span></li>
+              <li><span>Low-latency canvas, viewport culling ve düşük kaliteli daire modu</span></li>
+              <li><span>İsim, avatar, gol animasyonu ve HUD göstergelerini ayrı ayrı yönetme</span></li>
             </ul>
           </div>
 
@@ -2094,7 +2092,8 @@
     <div class="container footer-row">
       <div class="footer-copy">
         © 2026 <strong>HaxScipt Global League</strong>. Topluluk için geliştirildi.
-        HaxBall ile resmî bir bağlantısı yoktur.
+        HaxBall ile resmî bir bağlantısı yoktur. Haxball, Mario Carbajal'ın tescilli markasıdır.
+        Bu proje bir hayran yapımıdır.
       </div>
 
       <div class="footer-links">
