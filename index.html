@@ -1234,10 +1234,11 @@
       font-style: normal;
     }
 
+    /* GÜNCELLENEN KISIM: 5 kartı düzgün sıralamak için auto-fit kullanıldı */
     .download-grid {
       margin-top: 38px;
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
     }
 
@@ -1411,10 +1412,6 @@
       .showcase-copy {
         max-width: 720px;
       }
-
-      .download-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
     }
 
     @media (max-width: 860px) {
@@ -1586,6 +1583,7 @@
         border-bottom: 0;
       }
 
+      /* Mobilde alt alta sıralansın */
       .download-grid {
         grid-template-columns: 1fr;
       }
@@ -1997,78 +1995,69 @@
             </div>
           </div>
 
+          <!-- GÜNCELLENEN KISIM: 5 platform için yeni kartlar -->
           <div class="download-grid">
-            <a
-              class="download-card"
-              id="downloadWin64"
-              href="https://github.com/haxscipt/haxscipt-client/releases"
-              target="_blank"
-              rel="noreferrer"
-            >
+            
+            <a class="download-card" id="downloadWin64" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">64</span>
                   <span class="platform-arrow" aria-hidden="true">↘</span>
                 </div>
                 <h3>Windows 64-bit</h3>
-                <p>Modern Windows sistemler için önerilen sürüm</p>
+                <p>Standart Windows kullanıcıları</p>
               </div>
               <span class="download-status" id="statusWin64">Dosya aranıyor...</span>
             </a>
 
-            <a
-              class="download-card"
-              id="downloadWin32"
-              href="https://github.com/haxscipt/haxscipt-client/releases"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a class="download-card" id="downloadWin32" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">32</span>
                   <span class="platform-arrow" aria-hidden="true">↘</span>
                 </div>
                 <h3>Windows 32-bit</h3>
-                <p>Eski ve 32-bit Windows cihazlar için</p>
+                <p>Eski veya 32-bit Windows sistemleri</p>
               </div>
               <span class="download-status" id="statusWin32">Dosya aranıyor...</span>
             </a>
 
-            <a
-              class="download-card"
-              id="downloadMac"
-              href="https://github.com/haxscipt/haxscipt-client/releases"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a class="download-card" id="downloadMacX64" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">mac</span>
                   <span class="platform-arrow" aria-hidden="true">↘</span>
                 </div>
-                <h3>macOS</h3>
-                <p>Yayınlandığında DMG veya macOS paketi</p>
+                <h3>macOS x64</h3>
+                <p>Intel işlemcili Mac cihazlar</p>
               </div>
-              <span class="download-status" id="statusMac">Dosya aranıyor...</span>
+              <span class="download-status" id="statusMacX64">Dosya aranıyor...</span>
             </a>
 
-            <a
-              class="download-card"
-              id="downloadLinux"
-              href="https://github.com/haxscipt/haxscipt-client/releases"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a class="download-card" id="downloadMacArm64" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
+              <div>
+                <div class="platform-top">
+                  <span class="platform-mark">mac</span>
+                  <span class="platform-arrow" aria-hidden="true">↘</span>
+                </div>
+                <h3>macOS arm64</h3>
+                <p>Apple Silicon M1, M2, M3 ve sonraki işlemciler</p>
+              </div>
+              <span class="download-status" id="statusMacArm64">Dosya aranıyor...</span>
+            </a>
+
+            <a class="download-card" id="downloadLinux" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">LIN</span>
                   <span class="platform-arrow" aria-hidden="true">↘</span>
                 </div>
-                <h3>Linux</h3>
-                <p>Yayınlandığında AppImage veya paket</p>
+                <h3>Linux AMD64 DEB</h3>
+                <p>Debian, Ubuntu ve türevi dağıtımlar</p>
               </div>
               <span class="download-status" id="statusLinux">Dosya aranıyor...</span>
             </a>
+
           </div>
 
           <div class="download-note">
@@ -2164,21 +2153,27 @@
         return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
       };
 
+      // GÜNCELLENEN KISIM: Mac dosya tipleri resimdeki tar.gz yapısına göre güncellendi
       const assetName = (asset) => String(asset?.name || "").toLowerCase();
       const isWindowsInstaller = (asset) => /\.(exe|msi)$/i.test(assetName(asset));
-      const is32Bit = (asset) =>
-        /(?:^|[\s._-])(?:ia32|x32|x86(?![_-]?64)|win32|32[\s._-]?bit)(?:[\s._-]|$)/i.test(assetName(asset));
-      const is64Bit = (asset) =>
-        /(?:^|[\s._-])(?:x64|x86[_-]?64|amd64|win64|64[\s._-]?bit)(?:[\s._-]|$)/i.test(assetName(asset));
-      const isMacAsset = (asset) => {
+      const is32Bit = (asset) => /(?:^|[\s._-])(?:ia32|x32|x86(?![_-]?64)|win32|32[\s._-]?bit)(?:[\s._-]|$)/i.test(assetName(asset));
+      const is64Bit = (asset) => /(?:^|[\s._-])(?:x64|x86[_-]?64|amd64|win64|64[\s._-]?bit)(?:[\s._-]|$)/i.test(assetName(asset));
+      
+      const isMacX64 = (asset) => {
         const name = assetName(asset);
-        return /\.dmg$/i.test(name) ||
-          (/\.(pkg|zip)$/i.test(name) && /(?:mac|macos|darwin|osx|universal)/i.test(name));
+        return (/\.tar\.gz$/i.test(name) || /\.dmg$/i.test(name) || /\.pkg$/i.test(name)) && 
+               /(?:mac|macos)/i.test(name) && /(?:x64|intel)/i.test(name);
       };
+
+      const isMacArm64 = (asset) => {
+        const name = assetName(asset);
+        return (/\.tar\.gz$/i.test(name) || /\.dmg$/i.test(name) || /\.pkg$/i.test(name)) && 
+               /(?:mac|macos)/i.test(name) && /(?:arm64|m1|silicon)/i.test(name);
+      };
+
       const isLinuxAsset = (asset) => {
         const name = assetName(asset);
-        return /\.(appimage|deb|rpm)$/i.test(name) ||
-          (/\.tar\.gz$/i.test(name) && /linux/i.test(name));
+        return /\.deb$/i.test(name) || (/\.tar\.gz$/i.test(name) && /linux/i.test(name));
       };
 
       const setDownloadCard = (cardId, statusId, asset) => {
@@ -2211,7 +2206,8 @@
         [
           ["downloadWin64", "statusWin64"],
           ["downloadWin32", "statusWin32"],
-          ["downloadMac", "statusMac"],
+          ["downloadMacX64", "statusMacX64"],
+          ["downloadMacArm64", "statusMacArm64"],
           ["downloadLinux", "statusLinux"]
         ].forEach(([cardId, statusId]) => {
           const card = byId(cardId);
@@ -2235,13 +2231,13 @@
 
           const release = await response.json();
           const assets = Array.isArray(release.assets) ? release.assets : [];
+          
           const windowsAssets = assets.filter(isWindowsInstaller);
-
           const win32 = windowsAssets.find(is32Bit);
-          const win64 =
-            windowsAssets.find(is64Bit) ||
-            windowsAssets.find((asset) => !is32Bit(asset));
-          const mac = assets.find(isMacAsset);
+          const win64 = windowsAssets.find(is64Bit) || windowsAssets.find((asset) => !is32Bit(asset));
+          
+          const macX64 = assets.find(isMacX64);
+          const macArm64 = assets.find(isMacArm64);
           const linux = assets.find(isLinuxAsset);
 
           const releaseTitle = release.name || release.tag_name || "Son sürüm";
@@ -2261,7 +2257,8 @@
 
           setDownloadCard("downloadWin64", "statusWin64", win64);
           setDownloadCard("downloadWin32", "statusWin32", win32);
-          setDownloadCard("downloadMac", "statusMac", mac);
+          setDownloadCard("downloadMacX64", "statusMacX64", macX64);
+          setDownloadCard("downloadMacArm64", "statusMacArm64", macArm64);
           setDownloadCard("downloadLinux", "statusLinux", linux);
         } catch (error) {
           console.warn("Son GitHub sürümü alınamadı:", error);
