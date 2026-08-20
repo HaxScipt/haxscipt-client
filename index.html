@@ -1234,11 +1234,10 @@
       font-style: normal;
     }
 
-    /* GÜNCELLENEN KISIM: 5 kartı düzgün sıralamak için auto-fit kullanıldı */
     .download-grid {
       margin-top: 38px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -1300,6 +1299,51 @@
       font-size: 17px;
     }
 
+    .format-picker {
+      padding: 3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    .format-option {
+      min-width: 38px;
+      height: 25px;
+      padding: 0 7px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition:
+        background 150ms ease,
+        color 150ms ease,
+        box-shadow 150ms ease;
+    }
+
+    .format-option:hover:not(:disabled),
+    .format-option:focus-visible {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .format-option.is-active {
+      background: var(--yellow);
+      color: #08090c;
+      box-shadow: 0 0 18px rgba(231, 255, 69, 0.16);
+    }
+
+    .format-option:disabled {
+      opacity: 0.34;
+      cursor: not-allowed;
+    }
+
     .download-card h3 {
       margin: 17px 0 2px;
       font-size: 14px;
@@ -1316,6 +1360,18 @@
       color: var(--yellow);
       font-size: 9px;
       font-weight: 700;
+    }
+
+    .download-action {
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .download-action:hover,
+    .download-action:focus-visible {
+      color: #fff;
     }
 
     .download-note {
@@ -1411,6 +1467,10 @@
 
       .showcase-copy {
         max-width: 720px;
+      }
+
+      .download-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
@@ -1583,7 +1643,6 @@
         border-bottom: 0;
       }
 
-      /* Mobilde alt alta sıralansın */
       .download-grid {
         grid-template-columns: 1fr;
       }
@@ -1995,58 +2054,98 @@
             </div>
           </div>
 
-          <!-- GÜNCELLENEN KISIM: 5 platform için yeni kartlar -->
           <div class="download-grid">
-            
-            <a class="download-card" id="downloadWin64" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
+            <a
+              class="download-card"
+              id="downloadWin64"
+              href="https://github.com/haxscipt/haxscipt-client/releases"
+              target="_blank"
+              rel="noreferrer"
+            >
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">64</span>
                   <span class="platform-arrow" aria-hidden="true">↘</span>
                 </div>
                 <h3>Windows 64-bit</h3>
-                <p>Standart Windows kullanıcıları</p>
+                <p>Modern Windows sistemler için önerilen sürüm</p>
               </div>
               <span class="download-status" id="statusWin64">Dosya aranıyor...</span>
             </a>
 
-            <a class="download-card" id="downloadWin32" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
+            <a
+              class="download-card"
+              id="downloadWin32"
+              href="https://github.com/haxscipt/haxscipt-client/releases"
+              target="_blank"
+              rel="noreferrer"
+            >
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">32</span>
                   <span class="platform-arrow" aria-hidden="true">↘</span>
                 </div>
                 <h3>Windows 32-bit</h3>
-                <p>Eski veya 32-bit Windows sistemleri</p>
+                <p>Eski ve 32-bit Windows cihazlar için</p>
               </div>
               <span class="download-status" id="statusWin32">Dosya aranıyor...</span>
             </a>
 
-            <a class="download-card" id="downloadMacX64" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
+            <article class="download-card" id="downloadMacX64">
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">mac</span>
-                  <span class="platform-arrow" aria-hidden="true">↘</span>
+                  <div class="format-picker" role="group" aria-label="macOS x64 indirme formatı">
+                    <button class="format-option is-active" type="button" data-mac-arch="x64" data-format="dmg" aria-pressed="true" disabled>DMG</button>
+                    <button class="format-option" type="button" data-mac-arch="x64" data-format="zip" aria-pressed="false" disabled>ZIP</button>
+                  </div>
                 </div>
                 <h3>macOS x64</h3>
                 <p>Intel işlemcili Mac cihazlar</p>
               </div>
-              <span class="download-status" id="statusMacX64">Dosya aranıyor...</span>
-            </a>
+              <a
+                class="download-status download-action"
+                id="downloadMacX64Link"
+                href="https://github.com/haxscipt/haxscipt-client/releases"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span id="statusMacX64">Dosyalar aranıyor...</span>
+                <span aria-hidden="true">↘</span>
+              </a>
+            </article>
 
-            <a class="download-card" id="downloadMacArm64" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
+            <article class="download-card" id="downloadMacArm64">
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">mac</span>
-                  <span class="platform-arrow" aria-hidden="true">↘</span>
+                  <div class="format-picker" role="group" aria-label="macOS arm64 indirme formatı">
+                    <button class="format-option is-active" type="button" data-mac-arch="arm64" data-format="dmg" aria-pressed="true" disabled>DMG</button>
+                    <button class="format-option" type="button" data-mac-arch="arm64" data-format="zip" aria-pressed="false" disabled>ZIP</button>
+                  </div>
                 </div>
                 <h3>macOS arm64</h3>
                 <p>Apple Silicon M1, M2, M3 ve sonraki işlemciler</p>
               </div>
-              <span class="download-status" id="statusMacArm64">Dosya aranıyor...</span>
-            </a>
+              <a
+                class="download-status download-action"
+                id="downloadMacArm64Link"
+                href="https://github.com/haxscipt/haxscipt-client/releases"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span id="statusMacArm64">Dosyalar aranıyor...</span>
+                <span aria-hidden="true">↘</span>
+              </a>
+            </article>
 
-            <a class="download-card" id="downloadLinux" href="https://github.com/haxscipt/haxscipt-client/releases" target="_blank" rel="noreferrer">
+            <a
+              class="download-card"
+              id="downloadLinux"
+              href="https://github.com/haxscipt/haxscipt-client/releases"
+              target="_blank"
+              rel="noreferrer"
+            >
               <div>
                 <div class="platform-top">
                   <span class="platform-mark">LIN</span>
@@ -2057,7 +2156,6 @@
               </div>
               <span class="download-status" id="statusLinux">Dosya aranıyor...</span>
             </a>
-
           </div>
 
           <div class="download-note">
@@ -2153,28 +2251,104 @@
         return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
       };
 
-      // GÜNCELLENEN KISIM: Mac dosya tipleri resimdeki tar.gz yapısına göre güncellendi
       const assetName = (asset) => String(asset?.name || "").toLowerCase();
       const isWindowsInstaller = (asset) => /\.(exe|msi)$/i.test(assetName(asset));
-      const is32Bit = (asset) => /(?:^|[\s._-])(?:ia32|x32|x86(?![_-]?64)|win32|32[\s._-]?bit)(?:[\s._-]|$)/i.test(assetName(asset));
-      const is64Bit = (asset) => /(?:^|[\s._-])(?:x64|x86[_-]?64|amd64|win64|64[\s._-]?bit)(?:[\s._-]|$)/i.test(assetName(asset));
-      
-      const isMacX64 = (asset) => {
+      const is32Bit = (asset) =>
+        /(?:^|[\s._-])(?:ia32|x32|x86(?![_-]?64)|win32|32[\s._-]?bit)(?:[\s._-]|$)/i.test(assetName(asset));
+      const is64Bit = (asset) =>
+        /(?:^|[\s._-])(?:x64|x86[_-]?64|amd64|win64|64[\s._-]?bit)(?:[\s._-]|$)/i.test(assetName(asset));
+      const isMacAsset = (asset) => {
         const name = assetName(asset);
-        return (/\.tar\.gz$/i.test(name) || /\.dmg$/i.test(name) || /\.pkg$/i.test(name)) && 
-               /(?:mac|macos)/i.test(name) && /(?:x64|intel)/i.test(name);
+        return /\.(dmg|zip)$/i.test(name) && /(?:mac|macos|darwin|osx)/i.test(name);
       };
-
-      const isMacArm64 = (asset) => {
-        const name = assetName(asset);
-        return (/\.tar\.gz$/i.test(name) || /\.dmg$/i.test(name) || /\.pkg$/i.test(name)) && 
-               /(?:mac|macos)/i.test(name) && /(?:arm64|m1|silicon)/i.test(name);
-      };
-
+      const isMacArm64 = (asset) =>
+        /(?:^|[\s._-])(?:arm64|aarch64)(?:[\s._-]|$)/i.test(assetName(asset));
+      const isMacX64 = (asset) =>
+        /(?:^|[\s._-])(?:x64|x86[_-]?64|amd64)(?:[\s._-]|$)/i.test(assetName(asset));
+      const isFormat = (asset, format) => assetName(asset).endsWith(`.${format}`);
       const isLinuxAsset = (asset) => {
         const name = assetName(asset);
-        return /\.deb$/i.test(name) || (/\.tar\.gz$/i.test(name) && /linux/i.test(name));
+        return /\.(appimage|deb|rpm)$/i.test(name) ||
+          (/\.tar\.gz$/i.test(name) && /linux/i.test(name));
       };
+
+      const macDownloadState = {
+        x64: { selected: "dmg", assets: { dmg: null, zip: null } },
+        arm64: { selected: "dmg", assets: { dmg: null, zip: null } }
+      };
+
+      const macCardIds = {
+        x64: {
+          card: "downloadMacX64",
+          link: "downloadMacX64Link",
+          status: "statusMacX64",
+          title: "macOS x64"
+        },
+        arm64: {
+          card: "downloadMacArm64",
+          link: "downloadMacArm64Link",
+          status: "statusMacArm64",
+          title: "macOS arm64"
+        }
+      };
+
+      const renderMacDownloadCard = (arch, fallback = false) => {
+        const state = macDownloadState[arch];
+        const ids = macCardIds[arch];
+        const card = byId(ids.card);
+        const link = byId(ids.link);
+        const status = byId(ids.status);
+        const availableFormat = [state.selected, "dmg", "zip"].find(
+          (format, index, formats) => formats.indexOf(format) === index && state.assets[format]
+        );
+
+        if (availableFormat) state.selected = availableFormat;
+
+        card.querySelectorAll(".format-option").forEach((button) => {
+          const format = button.dataset.format;
+          const available = Boolean(state.assets[format]);
+          const active = available && format === state.selected;
+          button.disabled = !available;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+          button.title = available ? `${format.toUpperCase()} paketini seç` : `${format.toUpperCase()} paketi yayınlanmadı`;
+        });
+
+        const asset = availableFormat ? state.assets[availableFormat] : null;
+        card.classList.remove("available", "pending");
+
+        if (asset?.browser_download_url) {
+          link.href = asset.browser_download_url;
+          link.removeAttribute("target");
+          card.classList.add("available");
+          status.textContent = `İndir ${availableFormat.toUpperCase()}${asset.size ? ` • ${formatSize(asset.size)}` : ""}`;
+          link.setAttribute("aria-label", `${ids.title} ${availableFormat.toUpperCase()} paketini indir`);
+          return;
+        }
+
+        link.href = RELEASES_URL;
+        link.target = "_blank";
+        card.classList.add("pending");
+        status.textContent = fallback ? "Release sayfasını aç" : "Henüz yayınlanmadı";
+        link.setAttribute("aria-label", `${ids.title} sürümlerini GitHub'da görüntüle`);
+      };
+
+      const setMacDownloadAssets = (arch, assets, fallback = false) => {
+        macDownloadState[arch].assets = {
+          dmg: assets?.dmg || null,
+          zip: assets?.zip || null
+        };
+        renderMacDownloadCard(arch, fallback);
+      };
+
+      document.querySelectorAll(".format-option[data-mac-arch]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const { macArch: arch, format } = button.dataset;
+          if (!macDownloadState[arch]?.assets?.[format]) return;
+          macDownloadState[arch].selected = format;
+          renderMacDownloadCard(arch);
+        });
+      });
 
       const setDownloadCard = (cardId, statusId, asset) => {
         const card = byId(cardId);
@@ -2206,8 +2380,6 @@
         [
           ["downloadWin64", "statusWin64"],
           ["downloadWin32", "statusWin32"],
-          ["downloadMacX64", "statusMacX64"],
-          ["downloadMacArm64", "statusMacArm64"],
           ["downloadLinux", "statusLinux"]
         ].forEach(([cardId, statusId]) => {
           const card = byId(cardId);
@@ -2216,6 +2388,9 @@
           card.classList.add("pending");
           byId(statusId).textContent = "Release sayfasını aç";
         });
+
+        setMacDownloadAssets("x64", null, true);
+        setMacDownloadAssets("arm64", null, true);
       };
 
       const fetchLatestRelease = async () => {
@@ -2231,13 +2406,15 @@
 
           const release = await response.json();
           const assets = Array.isArray(release.assets) ? release.assets : [];
-          
           const windowsAssets = assets.filter(isWindowsInstaller);
+
           const win32 = windowsAssets.find(is32Bit);
-          const win64 = windowsAssets.find(is64Bit) || windowsAssets.find((asset) => !is32Bit(asset));
-          
-          const macX64 = assets.find(isMacX64);
-          const macArm64 = assets.find(isMacArm64);
+          const win64 =
+            windowsAssets.find(is64Bit) ||
+            windowsAssets.find((asset) => !is32Bit(asset));
+          const macAssets = assets.filter(isMacAsset);
+          const macX64 = macAssets.filter(isMacX64);
+          const macArm64 = macAssets.filter(isMacArm64);
           const linux = assets.find(isLinuxAsset);
 
           const releaseTitle = release.name || release.tag_name || "Son sürüm";
@@ -2257,8 +2434,14 @@
 
           setDownloadCard("downloadWin64", "statusWin64", win64);
           setDownloadCard("downloadWin32", "statusWin32", win32);
-          setDownloadCard("downloadMacX64", "statusMacX64", macX64);
-          setDownloadCard("downloadMacArm64", "statusMacArm64", macArm64);
+          setMacDownloadAssets("x64", {
+            dmg: macX64.find((asset) => isFormat(asset, "dmg")),
+            zip: macX64.find((asset) => isFormat(asset, "zip"))
+          });
+          setMacDownloadAssets("arm64", {
+            dmg: macArm64.find((asset) => isFormat(asset, "dmg")),
+            zip: macArm64.find((asset) => isFormat(asset, "zip"))
+          });
           setDownloadCard("downloadLinux", "statusLinux", linux);
         } catch (error) {
           console.warn("Son GitHub sürümü alınamadı:", error);
